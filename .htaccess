@@ -1,0 +1,10 @@
+<Files "send.php">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Files>
+
+<Limit POST>
+  Order allow,deny
+  Allow from all
+</Limit>
