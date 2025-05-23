@@ -1,6 +1,4 @@
 <Files "send.php">
-  Order allow,deny
-  Allow from all
   Require all granted
 </Files>
 
