@@ -5,10 +5,6 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php'; // Use Composer autoloader
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://paddlekelibia.tn');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send'])) {
     $mail = new PHPMailer(true);
