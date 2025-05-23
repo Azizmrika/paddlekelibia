@@ -4,35 +4,13 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
 
-// Set CORS headers
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); // Change this to your frontend domain for security
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
-// Handle preflight request
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
-
-// Only allow POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo json_encode(['status' => 'success', 'message' => 'Requête POST reçue.']);
+} else {
     http_response_code(405);
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Method Not Allowed. Only POST is accepted.'
-    ]);
-    exit;
+    echo json_encode(['status' => 'error', 'message' => 'Méthode non autorisée.']);
 }
-
-// Validate form submission
-if (!isset($_POST['send']) || $_POST['send'] !== '1') {
-    http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
-    exit;
-}
-
 // Initialize PHPMailer
 $mail = new PHPMailer(true);
 
