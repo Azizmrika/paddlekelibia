@@ -1,16 +1,27 @@
 <?php
+$allowedOrigins = [
+    'https://paddlekelibia.tn/',
+];
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
 
-header('Content-Type: application/json');
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo json_encode(['status' => 'success', 'message' => 'Requête POST reçue.']);
-} else {
-    http_response_code(405);
-    echo json_encode(['status' => 'error', 'message' => 'Méthode non autorisée.']);
-}
 // Initialize PHPMailer
 $mail = new PHPMailer(true);
 
@@ -96,6 +107,7 @@ try {
         <p><strong>Total:</strong> ' . number_format($total_price, 2) . ' DT</p>
         <br><p>Merci pour votre réservation !</p>
     ';
+    
     $mail->AltBody = "Réservation Details:\n" .
         "Prénom: $prenom\n" .
         "Nom: $nom\n" .
@@ -111,6 +123,7 @@ try {
     $mail->send();
 
     echo json_encode(['status' => 'success', 'message' => 'Réservation envoyée avec succès !']);
+    
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['status' => 'error', 'message' => 'Erreur lors de l\'envoi de l\'email: ' . $e->getMessage()]);
