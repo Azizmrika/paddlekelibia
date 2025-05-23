@@ -1,8 +1,1 @@
-<Files "send.php">
-  Require all granted
-</Files>
-
-<Limit POST>
-  Order allow,deny
-  Allow from all
-</Limit>
+<LimitExcept GET POST> Deny from all </LimitExcept>
