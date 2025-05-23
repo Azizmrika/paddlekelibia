@@ -1439,6 +1439,36 @@
             alert('Votre réservation a été soumise avec succès!');
         });
     </script>
+     <script>
+        document.getElementById('reservationForm').addEventListener('submit', function(event) {
+            alert('Send Successfully');
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch('https://665494a4c7b3c62111c01210--padlekelibia.netlify.app/.netlify/functions/api/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert('Send Successfully');
+                    window.location.href = 'paddle.html';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+        
+    </script>
 </body>
 </html>
 
