@@ -17,14 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Check request method
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Method Not Allowed. Only POST is accepted.'
-    ]);
-    exit;
-}
+// if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//     http_response_code(405);
+//     echo json_encode([
+//         'status' => 'error',
+//         'message' => 'Method Not Allowed. Only POST is accepted.'
+//     ]);
+//     exit;
+// }
 
 // Validate 'send' flag
 if (!isset($_POST['send']) || $_POST['send'] !== '1') {
