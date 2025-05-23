@@ -1394,9 +1394,12 @@
 
             document.getElementById("confirmationModal").style.display = "flex";
 
-            fetch("https://paddlekelibia.tn/send.php", {
+            fetch("https://formspree.io/f/meogwdke", {
               method: "POST",
               body: formData,
+              headers: {
+                Accept: "application/json",
+              },
             })
               .then((response) => {
                 if (!response.ok) {
