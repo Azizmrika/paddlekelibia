@@ -1,7 +1,8 @@
 <?php
 // Enable CORS and return JSON
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Origin: *"); // Or specify your domain instead of *
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type, Accept");
 
 require 'vendor/autoload.php'; // Make sure PHPMailer is installed via Composer
 
