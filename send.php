@@ -4,7 +4,11 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php'; // Use Composer autoloader
 
+// Set CORS headers
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: https://paddlekelibia.tn'); // Allow requests from your domain
+header('Access-Control-Allow-Methods: POST'); // Allow POST method
+header('Access-Control-Allow-Headers: Content-Type'); // Allow Content-Type header
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send'])) {
     $mail = new PHPMailer(true);
