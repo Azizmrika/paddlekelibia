@@ -1394,11 +1394,16 @@
 
             document.getElementById("confirmationModal").style.display = "flex";
 
-            fetch("https://paddlekelibia.tn/send.php", {
+            fetch("/send.php", {
               method: "POST",
               body: formData,
             })
-              .then((response) => response.json())
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
               .then((result) => {
                 const formMessage = document.getElementById("formMessage");
                 formMessage.style.display = "block";
