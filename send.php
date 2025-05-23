@@ -1,7 +1,5 @@
 <?php
-$allowedOrigins = [
-    'https://paddlekelibia.tn/',
-];
+$allowedOrigins = ['https://paddlekelibia.tn/', 'https://paddlekelibia.tn/send.php'];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
@@ -9,13 +7,14 @@ if (in_array($origin, $allowedOrigins)) {
     header("Access-Control-Allow-Origin: $origin");
     header("Access-Control-Allow-Methods: POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type");
+    header("Access-Control-Allow-Credentials: true");
 }
 
+// Réponse immédiate aux pré-requêtes OPTIONS (important pour fetch)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
-
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
