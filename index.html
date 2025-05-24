@@ -1397,10 +1397,6 @@
             fetch("./send.php", {
               method: "POST",
               body: formData,
-              mode: "cors",
-              headers: {
-                Accept: "application/json",
-              },
             })
               .then((response) => {
                 if (!response.ok) {

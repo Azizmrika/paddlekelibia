@@ -82,7 +82,7 @@ try {
 
     // Create email body
     $emailBody = "
-        <h3>Nouvelle Réservation Paddle Kelibia</h3>
+        <h3>Nouvelle Reservation Paddle Kelibia</h3>
         <p><strong>Nom:</strong> $prenom $nom</p>
         <p><strong>Téléphone:</strong> $tel</p>
         <p><strong>Date:</strong> $date à $time</p>
@@ -106,7 +106,7 @@ try {
     $mail->addAddress('mrikaaziz0@gmail.com', 'Admin');
 
     $mail->isHTML(true);
-    $mail->Subject = 'Nouvelle réservation paddle';
+    $mail->Subject = 'Nouvelle reservation paddle';
     $mail->Body = $emailBody;
 
     $mail->send();
