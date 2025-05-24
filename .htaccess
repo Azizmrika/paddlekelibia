@@ -1,1 +1,10 @@
 <LimitExcept GET POST> Deny from all </LimitExcept>
+<IfModule mod_headers.c>
+  Header set Access-Control-Allow-Origin "*" Header set
+  Access-Control-Allow-Methods "POST, OPTIONS" Header set
+  Access-Control-Allow-Headers "Content-Type, Accept"
+</IfModule>
+<IfModule mod_rewrite.c>
+  RewriteEngine On RewriteBase / RewriteCond %{REQUEST_FILENAME} !-f RewriteCond
+  %{REQUEST_FILENAME} !-d RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
+</IfModule>

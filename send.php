@@ -60,8 +60,8 @@ try {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
-    $mail->setFrom('your-email@example.com', 'Paddle Kelibia');
-    $mail->addAddress('destination@example.com', 'Admin'); // Replace with recipient
+    $mail->setFrom('mrikaaziz0@gmail.com', 'Paddle Kelibia');
+    $mail->addAddress('mrikaaziz0@gmail.com', 'Admin'); // Replace with recipient
 
     $mail->isHTML(true);
     $mail->Subject = 'Nouvelle réservation paddle';
