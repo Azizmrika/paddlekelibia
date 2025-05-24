@@ -11,22 +11,16 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Max-Age: 86400");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+// if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+//     http_response_code(200);
+//     exit();
+// }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['status' => 'error', 'message' => 'Méthode non autorisée']);
-    exit();
-}
-
-// Load .env if exists
-if (file_exists(__DIR__ . '/.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
-}
+// if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//     http_response_code(405);
+//     echo json_encode(['status' => 'error', 'message' => 'Méthode non autorisée']);
+//     exit();
+// }
 
 try {
     $required_fields = ['prenom', 'nom', 'tel', 'date', 'time', 'hours', 'paddle-count'];
@@ -47,11 +41,11 @@ try {
     $message = htmlspecialchars(trim($_POST['message'] ?? 'Aucun message.'));
 
     // Validation
-    if (!preg_match("/^[0-9]{8}$/", $tel)) throw new Exception("Numéro de téléphone invalide.");
-    if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $date)) throw new Exception("Format de date invalide.");
-    if (!preg_match("/^\d{2}:\d{2}$/", $time)) throw new Exception("Format d'heure invalide.");
-    if (!in_array($hours, ['1', '2', '3', '4', 'full'])) throw new Exception("Durée invalide.");
-    if ($paddleCount < 1 || $paddleCount > 10) throw new Exception("Nombre de paddles invalide.");
+    // if (!preg_match("/^[0-9]{8}$/", $tel)) throw new Exception("Numéro de téléphone invalide.");
+    // if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $date)) throw new Exception("Format de date invalide.");
+    // if (!preg_match("/^\d{2}:\d{2}$/", $time)) throw new Exception("Format d'heure invalide.");
+    // if (!in_array($hours, ['1', '2', '3', '4', 'full'])) throw new Exception("Durée invalide.");
+    // if ($paddleCount < 1 || $paddleCount > 10) throw new Exception("Nombre de paddles invalide.");
 
     $durations = [
         "1" => "1 heure",
@@ -88,7 +82,7 @@ try {
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'mrikaaziz0@gmail.com';
-    $mail->Password = getenv('SMTP_PASSWORD') ?: 'kgqlxqhrssjsfhnn';
+    $mail->Password = 'kgqlxqhrssjsfhnn';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
