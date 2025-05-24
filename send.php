@@ -1,9 +1,23 @@
 <?php
-header("Access-Control-Allow-Origin: https://paddlekelibia.tn");
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
 header("Access-Control-Max-Age: 86400");
+
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Process POST data
+    $prenom = $_POST['prenom'];
+    $nom = $_POST['nom'];
+    // ... process the rest of the form data
+    echo json_encode(['status' => 'success']);
+} else {
+    // Respond with 405 if method not allowed
+    http_response_code(405);
+    echo json_encode(['status' => 'error', 'message' => 'Méthode non autorisée']);
+}
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
