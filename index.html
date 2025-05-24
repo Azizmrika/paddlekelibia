@@ -901,7 +901,7 @@
                 contacterons pour confirmer votre réservation.
               </p>
             </div>
-            <form id="reservationForm" method="POST">
+            <form id="reservationForm" action="send.php" method="POST">
               <input type="hidden" name="send" value="1" />
               <input
                 type="hidden"
@@ -1313,6 +1313,7 @@
           .getElementById("reservationForm")
           .addEventListener("submit", function (event) {
             event.preventDefault();
+            const formAction = this.action || "./send.php";
 
             const formData = new FormData(this);
             const data = {};
@@ -1394,9 +1395,12 @@
 
             document.getElementById("confirmationModal").style.display = "flex";
 
-            fetch("./send.php", {
+            fetch(formAction, {
               method: "POST",
               body: formData,
+              headers: {
+                Accept: "application/json",
+              },
             })
               .then((response) => {
                 if (!response.ok) {
