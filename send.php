@@ -1,12 +1,12 @@
 <?php
 // Enable CORS and return JSON
-header("Access-Control-Allow-Origin: https://paddlekelibia.tn"); // Replace with your domain
+header("Access-Control-Allow-Origin: https://paddlekelibia.tn"); 
 header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Accept");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header("Content-Type: application/json");
+header("Content-Type: text/html; charset=UTF-8");
 
-require 'vendor/autoload.php'; // Ensure PHPMailer is installed via Composer
-
+require 'vendor/autoload.php'; 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 

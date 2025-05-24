@@ -1394,13 +1394,12 @@
 
             document.getElementById("confirmationModal").style.display = "flex";
 
-            fetch("https://paddlekelibia.tn/send.php", {
+            fetch("./send.php", {
               method: "POST",
               body: formData,
               mode: "cors",
               headers: {
                 Accept: "application/json",
-                "Content-Type": "application/x-www-form-urlencoded", // ou "multipart/form-data" si vous envoyez des fichiers
               },
             })
               .then((response) => {
