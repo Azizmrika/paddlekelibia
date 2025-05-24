@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: https://paddlekelibia.tn"); // Replace with your actual domain
+header("Access-Control-Allow-Origin: https://paddlekelibia.tn");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
@@ -11,11 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-require 'vendor/autoload.php'; 
+require 'vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Dotenv\Dotenv;
 
-
+// Load environment variables
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 try {
     // Validate and sanitize inputs
@@ -71,12 +74,12 @@ try {
         "full" => 120,
     ];
     $basePrice = $prices[$hours] ?? 0;
-    $discount = $paddleCount >= 3 ? 0.1 : 0; // 10% discount for 3+ paddles
+    $discount = $paddleCount >= 3 ? 0.1 : 0;
     $totalPrice = $basePrice * $paddleCount * (1 - $discount);
 
     // Create email body
     $emailBody = "
-        <h3>Nouvelle Reservation Paddle Kelibia</h3>
+        <h3>Nouvelle Réservation Paddle Kelibia</h3>
         <p><strong>Nom:</strong> $prenom $nom</p>
         <p><strong>Téléphone:</strong> $tel</p>
         <p><strong>Date:</strong> $date à $time</p>
@@ -92,7 +95,7 @@ try {
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'mrikaaziz0@gmail.com';
-    $mail->Password = 'kgqlxqhrssjsfhnn'; // Use environment variable in production
+    $mail->Password = getenv('SMTP_PASSWORD') ?: 'kgqlxqhrssjsfhnn';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
@@ -100,12 +103,13 @@ try {
     $mail->addAddress('mrikaaziz0@gmail.com', 'Admin');
 
     $mail->isHTML(true);
-    $mail->Subject = 'Nouvelle reservation paddle';
+    $mail->Subject = 'Nouvelle réservation paddle';
     $mail->Body = $emailBody;
 
     $mail->send();
     echo json_encode(["status" => "success", "totalPrice" => $totalPrice]);
 } catch (Exception $e) {
+    error_log("PHPMailer Error: " . $e->getMessage(), 3, __DIR__ . '/error.log');
     http_response_code(400);
     echo json_encode([
         "status" => "error",
