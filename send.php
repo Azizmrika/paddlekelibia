@@ -1,32 +1,21 @@
 <?php
-// Enable CORS and return JSON
-header("Access-Control-Allow-Origin: *"); // Temporarily allow all origins for debugging
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Origin: https://paddlekelibia.tn"); // Replace with your actual domain
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
+header("Access-Control-Max-Age: 86400");
 
-require 'vendor/autoload.php'; 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
+// Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// Debugging - log the request method
-error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
+require 'vendor/autoload.php'; 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-// Check if POST request
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    http_response_code(405);
-    echo json_encode([
-        "status" => "error", 
-        "message" => "Method Not Allowed. Received: " . $_SERVER['REQUEST_METHOD'],
-        "allowed_methods" => "POST"
-    ]);
-    exit;
-}
+
 
 try {
     // Validate and sanitize inputs
