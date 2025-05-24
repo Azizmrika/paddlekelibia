@@ -904,7 +904,7 @@
                 contacterons pour confirmer votre réservation.
               </p>
             </div>
-            <form id="reservationForm" method="POST">
+            <form id="reservationForm" method="POST" action="send.php">
               <input type="hidden" name="send" value="1" />
               <input
                 type="hidden"
@@ -917,7 +917,6 @@
                   >Date de réservation:</label
                 >
                 <input type="date" id="date" name="date" required />
-                <i class="fas fa-calendar-day input-icon"></i>
               </div>
 
               <div class="form-group">
@@ -932,8 +931,6 @@
                   min="06:00"
                   max="18:00"
                 />
-                <i class="fas fa-clock input-icon"></i>
-                <span class="form-note">Heures d'ouverture: 6h00 - 19h00</span>
               </div>
 
               <div class="form-group">
@@ -948,48 +945,21 @@
                   <option value="4">4 heures - 70 DT</option>
                   <option value="full">Journée complète - 120 DT</option>
                 </select>
-                <i class="fas fa-hourglass-half input-icon"></i>
               </div>
 
               <div class="form-group">
                 <label for="paddle-count" class="required-field"
                   >Nombre de paddles:</label
                 >
-                <div class="quantity-selector">
-                  <button
-                    type="button"
-                    class="quantity-btn"
-                    id="decrease-paddle"
-                    aria-label="Diminuer le nombre de paddles"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="number"
-                    id="paddle-count"
-                    name="paddle-count"
-                    min="1"
-                    max="10"
-                    value="1"
-                    class="quantity-input"
-                    required
-                  />
-                  <button
-                    type="button"
-                    class="quantity-btn"
-                    id="increase-paddle"
-                    aria-label="Augmenter le nombre de paddles"
-                  >
-                    +
-                  </button>
-                </div>
-                <small
-                  id="group-discount"
-                  style="color: var(--promo-color); display: none"
-                >
-                  <i class="fas fa-check-circle"></i> Promotion groupe appliquée
-                  (-10%)
-                </small>
+                <input
+                  type="number"
+                  id="paddle-count"
+                  name="paddle-count"
+                  min="1"
+                  max="10"
+                  value="1"
+                  required
+                />
               </div>
 
               <div class="form-group">
@@ -1001,7 +971,6 @@
                   placeholder="Votre prénom"
                   required
                 />
-                <i class="fas fa-user input-icon"></i>
               </div>
 
               <div class="form-group">
@@ -1013,7 +982,6 @@
                   placeholder="Votre nom"
                   required
                 />
-                <i class="fas fa-user input-icon"></i>
               </div>
 
               <div class="form-group">
@@ -1026,7 +994,6 @@
                   required
                   pattern="[0-9]{8}"
                 />
-                <i class="fas fa-phone input-icon"></i>
                 <span class="form-note">Format: 12345678 (8 chiffres)</span>
               </div>
 
@@ -1050,6 +1017,7 @@
               <button type="submit">
                 <i class="fas fa-paper-plane"></i> Confirmer la réservation
               </button>
+
               <div
                 id="formMessage"
                 class="form-message"
