@@ -13,6 +13,13 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <!-- Add EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+      (function () {
+        emailjs.init("CoVx73WXKgg-5qdWB");
+      })();
+    </script>
     <style>
       :root {
         --primary-color: #2c3e50;
@@ -35,6 +42,7 @@
         min-height: 100vh;
       }
 
+      /* Sidebar stylisée */
       .sidebar {
         width: var(--sidebar-width);
         background: linear-gradient(
@@ -593,6 +601,7 @@
         }
       }
 
+      /* Animation */
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -618,6 +627,7 @@
         animation-delay: 0.6s;
       }
 
+      /* Améliorations formulaire */
       .form-header {
         text-align: center;
         margin-bottom: 30px;
@@ -641,6 +651,7 @@
         display: block;
       }
 
+      /* Style pour les champs invalides */
       input:invalid,
       select:invalid,
       textarea:invalid {
@@ -653,7 +664,89 @@
         box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
       }
 
-      .confirmation-modal,
+      /* Confirmation de réservation */
+      .confirmation-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .confirmation-content {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 500px;
+        width: 90%;
+        animation: fadeIn 0.5s ease-out;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .confirmation-content h3 {
+        color: var(--primary-color);
+        margin: 0 0 20px;
+        text-align: center;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .confirmation-details {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border: 1px solid #eee;
+      }
+
+      .confirmation-details p {
+        margin: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.95rem;
+      }
+
+      .confirmation-details p span:last-child {
+        font-weight: bold;
+        color: var(--dark-color);
+      }
+
+      .confirmation-total {
+        font-size: 1.2rem;
+        color: var(--accent-color);
+        text-align: right;
+        margin-top: 15px;
+        font-weight: bold;
+      }
+
+      .close-modal {
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 20px auto 0;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .close-modal:hover {
+        background: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Success Modal */
       .success-modal {
         display: none;
         position: fixed;
@@ -667,75 +760,49 @@
         justify-content: center;
       }
 
-      .confirmation-content,
       .success-content {
         background: white;
         padding: 30px;
         border-radius: 10px;
-        max-width: 500px;
+        max-width: 400px;
         width: 90%;
-        animation: fadeIn 0.5s ease-out;
         text-align: center;
+        animation: fadeIn 0.5s ease-out;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       }
 
-      .confirmation-content h3,
+      .success-content i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+      }
+
       .success-content h3 {
         color: var(--primary-color);
-        margin-top: 0;
-        text-align: center;
+        margin: 0 0 15px;
+        font-size: 1.5rem;
       }
 
-      .confirmation-details {
-        background: #f9f9f9;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 20px 0;
+      .success-content p {
+        color: #7f8c8d;
+        margin: 0 0 20px;
+        font-size: 1rem;
       }
 
-      .confirmation-details p {
-        margin: 10px 0;
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .confirmation-details p span:last-child {
-        font-weight: bold;
-      }
-
-      .confirmation-total {
-        font-size: 1.2rem;
-        color: var(--accent-color);
-        text-align: right;
-        margin-top: 15px;
-        font-weight: bold;
-      }
-
-      .close-modal,
       .close-success-modal {
-        background: var(--secondary-color);
+        background: var(--promo-color);
         color: white;
         border: none;
         padding: 10px 20px;
         border-radius: 5px;
         cursor: pointer;
-        display: block;
-        margin: 20px auto 0;
-        transition: background 0.3s ease;
+        transition: all 0.3s ease;
+        font-weight: 500;
       }
 
-      .close-modal:hover,
       .close-success-modal:hover {
-        background: var(--primary-color);
-      }
-
-      .success-content i {
-        font-size: 2rem;
-        margin-bottom: 15px;
-      }
-
-      .success-content p {
-        margin: 10px 0;
-        font-size: 1.1rem;
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
       }
 
       .sidebar-header {
@@ -772,32 +839,12 @@
         -webkit-text-fill-color: transparent;
         text-align: center;
       }
-
-      .form-message {
-        text-align: center;
-        margin-top: 15px;
-        font-size: 1rem;
-        padding: 10px;
-        border-radius: 5px;
-      }
-
-      .form-message.success {
-        color: var(--promo-color);
-        background: rgba(39, 174, 96, 0.1);
-      }
-
-      .form-message.error {
-        color: var(--accent-color);
-        background: rgba(231, 76, 60, 0.1);
-      }
     </style>
   </head>
   <body>
+    <!-- Sidebar de navigation -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="logo-container">
-          <img src="kelibia.png" alt="Kelibia Logo" class="logo-img" />
-        </div>
         <h1>Paddle Kelibia Summer</h1>
       </div>
       <nav class="sidebar-nav">
@@ -839,6 +886,7 @@
       </div>
     </aside>
 
+    <!-- Contenu principal -->
     <main class="main-content">
       <div class="container">
         <section class="hero animated">
@@ -852,6 +900,7 @@
           </div>
         </section>
 
+        <!-- Bannière de promotion -->
         <div class="promo-banner animated delay-1">
           <h3><i class="fas fa-tag"></i> PROMOTION SPÉCIALE ÉTÉ 2025</h3>
           <p>
@@ -904,19 +953,20 @@
                 contacterons pour confirmer votre réservation.
               </p>
             </div>
-            <form id="reservationForm" method="POST" action="send.php">
-              <input type="hidden" name="send" value="1" />
+            <form id="reservationForm">
               <input
                 type="hidden"
-                name="subject"
+                name="_subject"
                 value="Nouvelle réservation Paddle Kelibia"
               />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_next" value="#confirmationModal" />
 
               <div class="form-group">
                 <label for="date" class="required-field"
                   >Date de réservation:</label
                 >
-                <input type="date" id="date" name="date" required />
+                <input type="date" id="date" name="date" required min="" />
                 <i class="fas fa-calendar-day input-icon"></i>
               </div>
 
@@ -960,7 +1010,6 @@
                     type="button"
                     class="quantity-btn"
                     id="decrease-paddle"
-                    aria-label="Diminuer le nombre de paddles"
                   >
                     -
                   </button>
@@ -978,7 +1027,6 @@
                     type="button"
                     class="quantity-btn"
                     id="increase-paddle"
-                    aria-label="Augmenter le nombre de paddles"
                   >
                     +
                   </button>
@@ -1050,11 +1098,6 @@
               <button type="submit">
                 <i class="fas fa-paper-plane"></i> Confirmer la réservation
               </button>
-              <div
-                id="formMessage"
-                class="form-message"
-                style="display: none"
-              ></div>
             </form>
           </div>
         </section>
@@ -1068,9 +1111,8 @@
               class="fas fa-map-marker-alt"
               style="color: var(--accent-color)"
             ></i>
-            Nous sommes situés directement sur la plage El Belge, près de la
-            zone des activités nautiques
           </p>
+
           <div class="map-container">
             <div class="map-title">
               <i class="fas fa-map-marker-alt"></i>
@@ -1078,6 +1120,14 @@
             </div>
             <div id="map"></div>
           </div>
+          <p style="text-align: center; margin-top: 15px">
+            <i
+              class="fas fa-map-marker-alt"
+              style="color: var(--accent-color)"
+            ></i>
+            Nous sommes situés directement sur la plage El Belge, près de la
+            zone des activités nautiques
+          </p>
           <div style="text-align: center; margin-top: 20px">
             <a
               href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2603.2333059007966!2d11.086569315596678!3d36.81205997995166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13029329705c9b01%3A0x695cc64b9af7a23a!2sPlage%20Mansourah!5e0!3m2!1sen!2stn!4v1695042533742!5m2!1sen!2stn"
@@ -1142,6 +1192,7 @@
       </footer>
     </main>
 
+    <!-- Confirmation Modal -->
     <div class="confirmation-modal" id="confirmationModal">
       <div class="confirmation-content">
         <h3>
@@ -1158,6 +1209,7 @@
       </div>
     </div>
 
+    <!-- Success Modal -->
     <div class="success-modal" id="successModal">
       <div class="success-content">
         <i class="fas fa-check-circle" style="color: var(--promo-color)"></i>
@@ -1168,6 +1220,352 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="script.js"></script>
+    <script>
+      // Mise à jour automatique de l'année
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Initialisation de la carte avec position exacte sur Plage El Belge
+      function initMap() {
+        // Coordonnées précises sur Plage El Belge (près de la zone des activités nautiques)
+        const plageBelge = [36.8475, 11.0939];
+
+        const map = L.map("map").setView(plageBelge, 19); // Zoom très précis
+
+        // Fond de carte plus adapté pour les zones côtières
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        // Ajout d'une image aérienne pour plus de précision
+        L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          {
+            attribution:
+              "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics",
+            maxZoom: 19,
+          }
+        ).addTo(map);
+
+        // Marqueur personnalisé avec icône plus visible
+        const paddleIcon = L.icon({
+          iconUrl: "https://cdn-icons-png.flaticon.com/512/2972/2972035.png",
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+          popupAnchor: [0, -40],
+        });
+
+        // Ajout du marqueur à l'emplacement exact
+        const marker = L.marker(plageBelge, {
+          icon: paddleIcon,
+          title: "Paddle Kelibia Summer",
+          alt: "Emplacement de location de paddle",
+          riseOnHover: true,
+        }).addTo(map);
+
+        // Popup avec plus d'informations
+        marker
+          .bindPopup(
+            `
+                <div style="text-align:center;">
+                    <b style="color:${getComputedStyle(
+                      document.documentElement
+                    ).getPropertyValue(
+                      "--primary-color"
+                    )}">Paddle Kelibia Summer</b><br>
+                    <small>Location de paddle gonflable</small><br><br>
+                    <img src="pad.jpg" style="max-width:100%; border-radius:5px;"><br>
+                    <div style="margin-top:10px;">
+                        <i class="fas fa-map-marker-alt" style="color:${getComputedStyle(
+                          document.documentElement
+                        ).getPropertyValue("--accent-color")}"></i> 
+                        Plage El Belge, Kelibia<br>
+                        <small>(Zone des activités nautiques)</small>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="https://www.google.com/maps/dir//36.8475,11.0939" target="_blank" style="background:${getComputedStyle(
+                          document.documentElement
+                        ).getPropertyValue(
+                          "--secondary-color"
+                        )}; color:white; padding:5px 10px; border-radius:5px; text-decoration:none; display:inline-block; margin-top:5px;">
+                            <i class="fas fa-directions"></i> Itinéraire
+                        </a>
+                    </div>
+                </div>
+            `
+          )
+          .openPopup();
+
+        // Ajout d'un cercle pour indiquer la zone précise (20m)
+        L.circle(plageBelge, {
+          color: getComputedStyle(document.documentElement).getPropertyValue(
+            "--secondary-color"
+          ),
+          fillColor: getComputedStyle(
+            document.documentElement
+          ).getPropertyValue("--secondary-color"),
+          fillOpacity: 0.2,
+          radius: 20,
+        })
+          .addTo(map)
+          .bindTooltip("Notre stand de location", {
+            permanent: false,
+            direction: "top",
+          });
+
+        // Ajout d'un polygone pour montrer la zone de plage
+        const beachArea = [
+          [36.8478, 11.0935],
+          [36.8472, 11.0943],
+          [36.8469, 11.0938],
+          [36.8475, 11.093],
+        ];
+
+        L.polygon(beachArea, {
+          color: "#f1c40f",
+          fillColor: "#f39c12",
+          fillOpacity: 0.1,
+          weight: 2,
+        })
+          .addTo(map)
+          .bindTooltip("Zone de plage El Belge", { permanent: false });
+
+        // Ajout d'un contrôle pour basculer entre les vues
+        L.control
+          .layers(
+            {
+              Carte: L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              ),
+              "Vue satellite": L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              ),
+            },
+            null,
+            { position: "topright" }
+          )
+          .addTo(map);
+
+        // Ajout d'un contrôle d'échelle
+        L.control.scale({ position: "bottomleft" }).addTo(map);
+      }
+
+      // Gestion du formulaire
+      document.addEventListener("DOMContentLoaded", function () {
+        initMap();
+
+        // Définir la date minimale comme aujourd'hui
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("date").min = today;
+
+        // Gestion du nombre de paddles
+        const paddleCount = document.getElementById("paddle-count");
+        const decreaseBtn = document.getElementById("decrease-paddle");
+        const increaseBtn = document.getElementById("increase-paddle");
+        const discountNotice = document.getElementById("group-discount");
+
+        decreaseBtn.addEventListener("click", function () {
+          if (parseInt(paddleCount.value) > 1) {
+            paddleCount.value = parseInt(paddleCount.value) - 1;
+            updateDiscountNotice();
+          }
+        });
+
+        increaseBtn.addEventListener("click", function () {
+          if (parseInt(paddleCount.value) < 10) {
+            paddleCount.value = parseInt(paddleCount.value) + 1;
+            updateDiscountNotice();
+          }
+        });
+
+        paddleCount.addEventListener("change", function () {
+          if (this.value < 1) this.value = 1;
+          if (this.value > 10) this.value = 10;
+          updateDiscountNotice();
+        });
+
+        function updateDiscountNotice() {
+          if (parseInt(paddleCount.value) >= 3) {
+            discountNotice.style.display = "block";
+          } else {
+            discountNotice.style.display = "none";
+          }
+        }
+
+        // Gestion du formulaire
+        document
+          .getElementById("reservationForm")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Extraction manuelle des valeurs des champs
+            const data = {
+              _subject: document.querySelector('input[name="_subject"]').value,
+              _template: document.querySelector('input[name="_template"]')
+                .value,
+              _next: document.querySelector('input[name="_next"]').value,
+              date: document.getElementById("date").value,
+              time: document.getElementById("time").value,
+              hours: document.getElementById("hours").value,
+              "paddle-count": document.getElementById("paddle-count").value,
+              prenom: document.getElementById("prenom").value,
+              nom: document.getElementById("nom").value,
+              tel: document.getElementById("tel").value,
+              message: document.getElementById("message").value || "",
+              email: document.querySelector('input[name="email"]').value,
+            };
+
+            // Log form data for debugging
+            console.log("Form Data to Send:", data);
+
+            // Calcul du prix avec promotions
+            const hours = data["hours"];
+            const paddleCount = parseInt(data["paddle-count"]);
+            let basePrice = 0;
+            let durationText = "";
+            let discount = 0;
+            let groupDiscountApplied = false;
+
+            // Calcul du prix de base selon la durée
+            switch (hours) {
+              case "1":
+                basePrice = 20;
+                durationText = "1 heure";
+                break;
+              case "2":
+                basePrice = 35;
+                durationText = "2 heures";
+                break;
+              case "3":
+                basePrice = 50;
+                durationText = "3 heures";
+                break;
+              case "4":
+                basePrice = 70;
+                durationText = "4 heures";
+                break;
+              case "full":
+                basePrice = 120;
+                durationText = "Journée complète";
+                break;
+            }
+
+            // Application de la promotion groupe si applicable
+            if (paddleCount >= 3) {
+              discount += 0.1;
+              groupDiscountApplied = true;
+            }
+
+            const totalPrice = basePrice * paddleCount * (1 - discount);
+            const savings = basePrice * paddleCount - totalPrice;
+
+            // Afficher les détails dans le modal de confirmation
+            const detailsDiv = document.getElementById("reservationDetails");
+            detailsDiv.innerHTML = `
+              <p><span>Nom:</span> <span>${data["prenom"]} ${
+              data["nom"]
+            }</span></p>
+              <p><span>Téléphone:</span> <span>${data["tel"]}</span></p>
+              <p><span>Email:</span> <span>${data["email"]}</span></p>
+              <p><span>Date:</span> <span>${data["date"]} à ${
+              data["time"]
+            }</span></p>
+              <p><span>Durée:</span> <span>${durationText}</span></p>
+              <p><span>Nombre de paddles:</span> <span>${paddleCount}</span></p>
+              ${
+                groupDiscountApplied
+                  ? '<p><span style="color:var(--promo-color);">Promotion groupe:</span> <span>-10%</span></p>'
+                  : ""
+              }
+              ${
+                savings > 0
+                  ? `<p><span>Économies:</span> <span>${savings.toFixed(
+                      2
+                    )} DT</span></p>`
+                  : ""
+              }
+              ${
+                data["message"]
+                  ? `<p><span>Message:</span> <span>${data["message"]}</span></p>`
+                  : ""
+              }
+            `;
+
+            document.getElementById(
+              "totalPrice"
+            ).innerHTML = `Total: <span style="font-size:1.3em;">${totalPrice.toFixed(
+              2
+            )} DT</span>`;
+
+            // Afficher le modal de confirmation
+            document.getElementById("confirmationModal").style.display = "flex";
+
+            // Gérer la fermeture du modal de confirmation
+            document
+              .getElementById("closeModal")
+              .addEventListener("click", function () {
+                document.getElementById("confirmationModal").style.display =
+                  "none";
+                // Obtenir la date et l'heure actuelles au format souhaité
+                const now = new Date();
+                const currentDateTime = now.toLocaleString("fr-FR", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                });
+                // Envoyer l'e-mail avec EmailJS
+                emailjs
+                  .send("service_7j8j8q8", "template_g8q6pef", {
+                    prenom: data.prenom,
+                    nom: data.nom,
+                    tel: data.tel,
+                    email: data.email,
+                    date: data.date,
+                    time: data.time,
+                    hours: data.hours,
+                    paddleCount: data["paddle-count"], // Match the form field name
+                    message: data.message || "",
+                  })
+                  .then(
+                    function (response) {
+                      console.log("Email sent successfully:", response);
+                      // Afficher le modal de succès
+                      document.getElementById("successModal").style.display =
+                        "flex";
+                      // Réinitialiser le formulaire
+                      document.getElementById("reservationForm").reset();
+                      paddleCount.value = 1;
+                      updateDiscountNotice();
+                      document.getElementById("date").min = today;
+                    },
+                    function (error) {
+                      console.error("Email sending failed:", error);
+                      alert("Erreur lors de l'envoi: " + error.text);
+                    }
+                  );
+              });
+          });
+
+        // Gérer la fermeture du modal de succès
+        document
+          .getElementById("closeSuccessModal")
+          .addEventListener("click", function () {
+            document.getElementById("successModal").style.display = "none";
+          });
+
+        // Gestion du menu actif
+        document.querySelectorAll(".sidebar-nav a").forEach((link) => {
+          link.addEventListener("click", function () {
+            document
+              .querySelectorAll(".sidebar-nav a")
+              .forEach((el) => el.classList.remove("active"));
+            this.classList.add("active");
+          });
+        });
+      });
+    </script>
   </body>
 </html>
