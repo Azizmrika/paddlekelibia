@@ -577,7 +577,10 @@
 
       @media (max-width: 768px) {
         .hero {
-          height: 300px;
+          height: 100%;
+        }
+        .test {
+          width: 96%;
         }
 
         .hero h2 {
@@ -918,7 +921,6 @@
               <div class="product-info">
                 <h2>Paddle Gonflable Premium</h2>
                 <div>
-                  
                   <span class="price">30,00 DT/heure</span>
                 </div>
                 <p>
@@ -966,7 +968,14 @@
                 <label for="date" class="required-field"
                   >Date de réservation:</label
                 >
-                <input type="date" id="date" name="date" required min="" />
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  required
+                  min=""
+                  class="test"
+                />
                 <i class="fas fa-calendar-day input-icon"></i>
               </div>
 
@@ -981,6 +990,7 @@
                   required
                   min="06:00"
                   max="18:00"
+                  class="test"
                 />
                 <i class="fas fa-clock input-icon"></i>
                 <span class="form-note">Heures d'ouverture: 6h00 - 19h00</span>
