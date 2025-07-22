@@ -842,13 +842,16 @@
         -webkit-text-fill-color: transparent;
         text-align: center;
       }
+      
     </style>
   </head>
   <body>
+    
     <!-- Sidebar de navigation -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>Paddle Kelibia Summer</h1>
+        
       </div>
       <nav class="sidebar-nav">
         <ul>
@@ -892,15 +895,33 @@
     <!-- Contenu principal -->
     <main class="main-content">
       <div class="container">
-        <section class="hero animated">
-          <div class="hero-content">
-            <img src="kelibia.png" alt="Kelibia" class="logo-img" />
-            <h2>Location de Paddle à Plage El Belge</h2>
-            <p>
-              Découvrez les eaux cristallines de Kelibia avec nos paddles
-              gonflables haut de gamme
-            </p>
-          </div>
+  <section class="hero animated">
+    <div class="hero-content">
+      <img src="kelibia.png" alt="Kelibia" class="logo-img" />
+
+      <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <!-- Drapeau tunisien à gauche -->
+        <a href="?lang=tn">
+          <img src="https://flagcdn.com/tn.svg" alt="Tunisien" width="30" height="20" />
+        </a>
+
+        <!-- Titre principal -->
+        <h2 style="margin: 0;">Location de Paddle à Plage El Belge</h2>
+
+        <!-- Drapeau italien à droite -->
+        <a href="?lang=it">
+          <img src="https://flagcdn.com/it.svg" alt="Italiano" width="30" height="20" />
+        </a>
+      </div>
+
+      <p>
+        Découvrez les eaux cristallines de Kelibia avec nos paddles
+        gonflables haut de gamme
+      </p>
+    </div>
+  </section>
+</div>
+
         </section>
 
         <!-- Bannière de promotion -->
@@ -1193,13 +1214,20 @@
       </div>
 
       <footer>
-        <div class="container">
-          <p>
-            © <span id="year">2025</span> Paddle Kelibia Summer - Location de
-            paddle à Plage El Belge. Tous droits réservés.
-          </p>
-        </div>
-      </footer>
+  <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+    <a href="?lang=tn">
+      <img src="https://flagcdn.com/tn.svg" alt="Tunisien" width="60" height="30" />
+    </a>
+    
+    <p style="text-align: center; flex: 1;">
+      © <span id="year">2025</span> Paddle Kelibia Summer - Location de
+      paddle à Plage El Belge. Tous droits réservés.
+    </p>
+
+    <img src="https://flagcdn.com/it.svg" alt="Italian" width="60" height="30" />
+  </div>
+</footer>
+
     </main>
 
     <!-- Confirmation Modal -->
