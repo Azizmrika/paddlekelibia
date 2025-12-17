@@ -577,10 +577,7 @@
 
       @media (max-width: 768px) {
         .hero {
-          height: 100%;
-        }
-        .test {
-          width: 96%;
+          height: 300px;
         }
 
         .hero h2 {
@@ -942,6 +939,7 @@
               <div class="product-info">
                 <h2>Paddle Gonflable Premium</h2>
                 <div>
+                  
                   <span class="price">30,00 DT/heure</span>
                 </div>
                 <p>
@@ -989,14 +987,7 @@
                 <label for="date" class="required-field"
                   >Date de réservation:</label
                 >
-                <input
-                  type="date"
-                  id="date"
-                  name="date"
-                  required
-                  min=""
-                  class="test"
-                />
+                <input type="date" id="date" name="date" required min="" />
                 <i class="fas fa-calendar-day input-icon"></i>
               </div>
 
@@ -1011,7 +1002,6 @@
                   required
                   min="06:00"
                   max="18:00"
-                  class="test"
                 />
                 <i class="fas fa-clock input-icon"></i>
                 <span class="form-note">Heures d'ouverture: 6h00 - 19h00</span>
@@ -1108,6 +1098,17 @@
                 <i class="fas fa-phone input-icon"></i>
                 <span class="form-note">Format: 12345678 (8 chiffres)</span>
               </div>
+              <div class="form-group">
+  <label for="client_email" class="required-field">Votre email (pour recevoir la confirmation) :</label>
+  <input 
+    type="email" 
+    id="client_email" 
+    name="client_email" 
+    placeholder="exemple@gmail.com" 
+    required 
+  />
+  <i class="fas fa-envelope input-icon"></i>
+</div>
 
               <div class="form-group">
                 <label for="message">Message (optionnel):</label>
@@ -1604,6 +1605,83 @@
           });
         });
       });
+      document.getElementById("reservationForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const data = {
+    prenom: document.getElementById("prenom").value.trim(),
+    nom: document.getElementById("nom").value.trim(),
+    client_email: document.getElementById("client_email").value.trim(),
+    tel: document.getElementById("tel").value,
+    date: document.getElementById("date").value,
+    time: document.getElementById("time").value,
+    hours: document.getElementById("hours").value,
+    paddleCount: parseInt(document.getElementById("paddle-count").value),
+    message: document.getElementById("message").value.trim() || "Aucun message"
+  };
+
+  // Calcul du prix
+  const prix = { "1": 30, "2": 55, "3": 80, "4": 100, "full": 120 };
+  const prixBase = prix[data.hours];
+  const reduction = data.paddleCount >= 3 ? 0.1 : 0;
+  const total = (prixBase * data.paddleCount * (1 - reduction)).toFixed(2);
+  const dureeTexte = data.hours === "full" ? "Journée complète" : `${data.hours} heure${data.hours > 1 ? "s" : ""}`;
+
+  // Affichage dans le modal
+  document.getElementById("reservationDetails").innerHTML = `
+    <p><span>Client :</span> <strong>${data.prenom} ${data.nom}</strong></p>
+    <p><span>Email :</span> <strong>${data.client_email}</strong></p>
+    <p><span>Tél :</span> <strong>${data.tel}</strong></p>
+    <p><span>Date :</span> <strong>${data.date} à ${data.time}</strong></p>
+    <p><span>Durée :</span> <strong>${dureeTexte}</strong></p>
+    <p><span>Paddles :</span> <strong>${data.paddleCount}</strong></p>
+    ${reduction ? '<p style="color:var(--promo-color)"><strong>Promotion groupe -10% appliquée !</strong></p>' : ''}
+  `;
+  document.getElementById("totalPrice").innerHTML = `Total à payer : <strong style="font-size:1.5em;color:var(--accent-color)">${total} DT</strong>`;
+
+  document.getElementById("confirmationModal").style.display = "flex";
+
+  // ENVOI DES EMAILS QUAND LE CLIENT CLIQUE "FERMER"
+  document.getElementById("closeModal").onclick = function () {
+    document.getElementById("confirmationModal").style.display = "none";
+
+    // 1. Email à TOI (propriétaire) - ton template existant
+    emailjs.send("service_vfzpwsf", "template_g8q6pef", {
+      prenom: data.prenom,
+      nom: data.nom,
+      client_email: data.client_email,
+      tel: data.tel,
+      date: data.date,
+      time: data.time,
+      hours: dureeTexte,
+      paddleCount: data.paddleCount,
+      message: data.message,
+      totalPrice: total + " DT"
+    });
+
+    const clientEmail = document.getElementById("client_email").value;
+
+emailjs.send("service_6t6otur", "template_fnvhqvu", {
+  prenom: data.prenom,
+  nom: data.nom,
+  client_email: data.client_email, // 🔥 OBLIGATOIRE
+  date: data.date,
+  time: data.time,
+  duration: dureeTexte,
+  paddleCount: data.paddleCount,
+  totalPrice: total + " DT",
+  message: data.message
+})
+.then(() => {
+  console.log("Email client envoyé avec succès");
+})
+.catch(error => {
+  console.error("Erreur email client :", error);
+});
+
+
+  };
+});
     </script>
   </body>
 </html>
