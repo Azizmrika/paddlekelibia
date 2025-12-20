@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="kelibia.png" type="image/jpeg" />
     <title>Paddle Kelibia Summer - Location à Plage El Belge</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <!-- Add EmailJS SDK -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
       (function () {
@@ -28,13 +21,18 @@
         --promo-color: #27ae60;
         --light-color: #ecf0f1;
         --dark-color: #2c3e50;
-        --sidebar-width: 250px;
+        --sidebar-width: 280px;
+        --mobile-header-height: 70px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #f5f5f5;
         color: #333;
         line-height: 1.6;
@@ -42,14 +40,61 @@
         min-height: 100vh;
       }
 
-      /* Sidebar stylisée */
+      /* MOBILE HEADER - Visible uniquement sur mobile */
+      .mobile-header {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-header-height);
+        background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+        color: white;
+        z-index: 1001;
+        padding: 0 15px;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      }
+
+      .mobile-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .mobile-logo img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .mobile-logo h1 {
+        font-size: 1.1rem;
+        background: linear-gradient(to right, var(--secondary-color), var(--light-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .menu-toggle {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.8rem;
+        cursor: pointer;
+        padding: 5px;
+        transition: transform 0.3s ease;
+      }
+
+      .menu-toggle:active {
+        transform: scale(0.9);
+      }
+
+      /* SIDEBAR */
       .sidebar {
         width: var(--sidebar-width);
-        background: linear-gradient(
-          135deg,
-          var(--primary-color),
-          var(--dark-color)
-        );
+        background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
         color: white;
         position: fixed;
         height: 100vh;
@@ -58,6 +103,7 @@
         z-index: 1000;
         display: flex;
         flex-direction: column;
+        transition: transform 0.3s ease;
       }
 
       .sidebar-header {
@@ -66,14 +112,24 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
 
+      .logo-container {
+        margin-bottom: 15px;
+      }
+
+      .logo-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto;
+        display: block;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+      }
+
       .sidebar-header h1 {
-        margin: 0;
-        font-size: 1.5rem;
-        background: linear-gradient(
-          to right,
-          var(--secondary-color),
-          var(--light-color)
-        );
+        margin: 10px 0 0;
+        font-size: 1.3rem;
+        background: linear-gradient(to right, var(--secondary-color), var(--light-color));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -97,11 +153,12 @@
       .sidebar-nav a {
         display: flex;
         align-items: center;
-        padding: 12px 20px;
+        padding: 15px 20px;
         color: var(--light-color);
         text-decoration: none;
         transition: all 0.3s ease;
         border-left: 3px solid transparent;
+        font-size: 0.95rem;
       }
 
       .sidebar-nav a:hover,
@@ -111,9 +168,44 @@
       }
 
       .sidebar-nav i {
-        margin-right: 10px;
+        margin-right: 12px;
         width: 20px;
         text-align: center;
+        font-size: 1.1rem;
+      }
+
+      .lang-switcher {
+        padding: 15px 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .lang-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        color: white;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .lang-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .lang-btn.active {
+        background: var(--secondary-color);
+        border-color: var(--secondary-color);
       }
 
       .sidebar-footer {
@@ -124,110 +216,113 @@
         border-top: 1px solid rgba(255, 255, 255, 0.1);
       }
 
+      /* MAIN CONTENT */
       .main-content {
         flex: 1;
         margin-left: var(--sidebar-width);
         padding: 20px;
+        width: calc(100% - var(--sidebar-width));
       }
 
       .container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 20px;
       }
 
+      /* HERO SECTION */
       .hero {
-        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-          url("padel.jpg");
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("padel.jpg");
         background-size: cover;
         background-position: center;
-        height: 400px;
+        min-height: 400px;
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
         color: white;
         margin-bottom: 40px;
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        padding: 20px;
       }
 
       .hero-content {
         max-width: 800px;
-        padding: 20px;
+      }
+
+      .hero-logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+        border: 4px solid white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       }
 
       .hero h2 {
         font-size: 2.5rem;
-        margin-bottom: 20px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        line-height: 1.2;
       }
 
       .hero p {
         font-size: 1.2rem;
-        margin-bottom: 30px;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
       }
 
+      /* PROMO BANNER */
       .promo-banner {
-        background: linear-gradient(to right, var(--promo-color), #2ecc71);
+        background: linear-gradient(135deg, var(--promo-color), #2ecc71);
         color: white;
-        padding: 15px;
-        border-radius: 8px;
+        padding: 20px;
+        border-radius: 12px;
         text-align: center;
         margin-bottom: 30px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         animation: pulse 2s infinite;
       }
 
       @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.02);
-        }
-        100% {
-          transform: scale(1);
-        }
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
       }
 
       .promo-banner h3 {
-        margin: 0;
-        font-size: 1.3rem;
+        margin: 0 0 10px;
+        font-size: 1.4rem;
       }
 
       .promo-banner p {
-        margin: 5px 0 0;
-        font-size: 0.9rem;
+        margin: 0;
+        font-size: 1rem;
       }
 
+      /* PRODUCT SECTION */
       .product-container {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 30px;
-        justify-content: center;
         margin-bottom: 50px;
       }
 
       .product {
-        flex: 1 1 600px;
-        display: flex;
-        flex-direction: column;
         background: white;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
       .product:hover {
         transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
       }
 
       .product-image {
-        height: 300px;
+        height: 250px;
         overflow: hidden;
         position: relative;
       }
@@ -238,10 +333,11 @@
         right: 15px;
         background-color: var(--promo-color);
         color: white;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 0.8rem;
+        padding: 8px 15px;
+        border-radius: 25px;
+        font-size: 0.85rem;
         font-weight: bold;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
       }
 
       .product-image img {
@@ -252,7 +348,7 @@
       }
 
       .product:hover .product-image img {
-        transform: scale(1.05);
+        transform: scale(1.1);
       }
 
       .product-info {
@@ -260,9 +356,9 @@
       }
 
       .product-info h2 {
-        margin-top: 0;
+        margin: 0 0 15px;
         color: var(--primary-color);
-        font-size: 1.8rem;
+        font-size: 1.6rem;
       }
 
       .price {
@@ -273,27 +369,39 @@
         display: block;
       }
 
-      .old-price {
-        text-decoration: line-through;
-        color: #95a5a6;
-        font-size: 1.2rem;
-        margin-right: 10px;
+      .product-info ul {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0 0;
       }
 
+      .product-info ul li {
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #555;
+      }
+
+      .product-info ul li i {
+        color: var(--promo-color);
+        font-size: 1.1rem;
+      }
+
+      /* FORM SECTION */
       .form-section {
         background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 35px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         margin-bottom: 40px;
       }
 
       .form-section h2 {
         color: var(--primary-color);
-        margin-top: 0;
+        margin: 0 0 10px;
         text-align: center;
         font-size: 1.8rem;
-        margin-bottom: 25px;
         position: relative;
       }
 
@@ -303,25 +411,36 @@
         width: 80px;
         height: 3px;
         background: var(--secondary-color);
-        margin: 10px auto;
+        margin: 15px auto;
+      }
+
+      .form-header p {
+        text-align: center;
+        color: #7f8c8d;
+        margin-bottom: 30px;
       }
 
       form {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 20px;
       }
 
       .form-group {
-        margin-bottom: 15px;
-        position: relative;
+        margin-bottom: 5px;
       }
 
       form label {
         display: block;
         margin-bottom: 8px;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--dark-color);
+        font-size: 0.95rem;
+      }
+
+      .required-field::after {
+        content: " *";
+        color: var(--accent-color);
       }
 
       form input,
@@ -329,8 +448,8 @@
       form textarea {
         width: 100%;
         padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
         font-size: 16px;
         transition: all 0.3s ease;
         font-family: inherit;
@@ -342,47 +461,35 @@
       form textarea:focus {
         border-color: var(--secondary-color);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
         background-color: white;
-      }
-
-      .form-group .input-icon {
-        position: absolute;
-        right: 15px;
-        top: 40px;
-        color: #95a5a6;
       }
 
       .quantity-selector {
         display: flex;
         align-items: center;
-        background-color: #f9f9f9;
-        border-radius: 6px;
+        background-color: white;
+        border-radius: 8px;
         overflow: hidden;
-        border: 1px solid #ddd;
+        border: 2px solid #e0e0e0;
       }
 
       .quantity-btn {
         background: var(--secondary-color);
         color: white;
         border: none;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
+        width: 45px;
+        height: 48px;
+        font-size: 1.3rem;
         cursor: pointer;
         transition: background 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .quantity-btn:hover {
         background: var(--primary-color);
-      }
-
-      .quantity-btn:first-child {
-        border-radius: 6px 0 0 6px;
-      }
-
-      .quantity-btn:last-child {
-        border-radius: 0 6px 6px 0;
       }
 
       .quantity-input {
@@ -390,48 +497,56 @@
         text-align: center;
         border: none;
         background: white;
-        height: 40px;
-        font-size: 16px;
-      }
-
-      form button {
-        background: linear-gradient(
-          to right,
-          var(--secondary-color),
-          var(--primary-color)
-        );
-        color: white;
-        border: none;
-        padding: 14px 20px;
+        height: 48px;
         font-size: 16px;
         font-weight: 600;
-        border-radius: 6px;
+      }
+
+      form button[type="submit"] {
+        background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        color: white;
+        border: none;
+        padding: 16px 30px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease;
         grid-column: 1 / -1;
-        max-width: 300px;
+        max-width: 100%;
         margin: 20px auto 0;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
       }
 
-      form button:hover {
-        background: linear-gradient(
-          to right,
-          var(--primary-color),
-          var(--secondary-color)
-        );
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      form button[type="submit"]:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
       }
 
+      .form-note {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin-top: 5px;
+      }
+
+      #group-discount {
+        display: none;
+        color: var(--promo-color);
+        font-weight: 600;
+        margin-top: 8px;
+        font-size: 0.9rem;
+      }
+
+      /* MAP SECTION */
       .map-container {
-        height: 500px;
-        border-radius: 10px;
+        height: 450px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         margin-bottom: 40px;
         position: relative;
       }
@@ -443,38 +558,34 @@
 
       .map-title {
         position: absolute;
-        top: 20px;
-        left: 20px;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 10px 20px;
-        border-radius: 5px;
+        top: 15px;
+        left: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 12px 20px;
+        border-radius: 8px;
         z-index: 1000;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         font-weight: bold;
         color: var(--primary-color);
         display: flex;
         align-items: center;
         gap: 10px;
+        font-size: 0.95rem;
       }
 
-      .map-title i {
-        color: var(--accent-color);
-      }
-
+      /* CONTACT SECTION */
       .contact-info {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
         margin-bottom: 40px;
       }
 
       .contact-card {
-        flex: 1 1 300px;
         background: white;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         text-align: center;
         transition: transform 0.3s ease;
       }
@@ -485,268 +596,36 @@
 
       .contact-card h3 {
         color: var(--primary-color);
-        margin-top: 0;
+        margin: 0 0 15px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
+        font-size: 1.2rem;
+      }
+
+      .contact-card p {
+        margin: 8px 0;
+        color: #555;
       }
 
       .contact-card a {
         color: var(--secondary-color);
         text-decoration: none;
-        font-weight: 500;
+        font-weight: 600;
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        margin-top: 10px;
+        margin-top: 12px;
         transition: color 0.3s ease;
       }
 
       .contact-card a:hover {
         color: var(--primary-color);
-        text-decoration: underline;
       }
 
-      .social-icons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 15px;
-      }
-
-      .social-icons a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: var(--primary-color);
-        color: white;
-        transition: all 0.3s ease;
-      }
-
-      .social-icons a:hover {
-        background: var(--secondary-color);
-        transform: translateY(-3px);
-      }
-
-      footer {
-        background: linear-gradient(
-          135deg,
-          var(--primary-color),
-          var(--dark-color)
-        );
-        color: var(--light-color);
-        text-align: center;
-        padding: 30px 0;
-        margin-top: 50px;
-        border-radius: 8px;
-      }
-
-      footer p {
-        margin: 0;
-      }
-
-      @media (max-width: 992px) {
-        .sidebar {
-          width: 70px;
-          overflow: hidden;
-        }
-
-        .sidebar-header h1,
-        .sidebar-nav span {
-          display: none;
-        }
-
-        .sidebar-nav i {
-          margin-right: 0;
-          font-size: 1.2rem;
-        }
-
-        .sidebar-nav a {
-          justify-content: center;
-          padding: 15px 0;
-        }
-
-        .main-content {
-          margin-left: 70px;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .hero {
-          height: 300px;
-        }
-
-        .hero h2 {
-          font-size: 2rem;
-        }
-
-        form {
-          grid-template-columns: 1fr;
-        }
-
-        .product {
-          flex-direction: column;
-        }
-
-        .product-image {
-          height: 200px;
-        }
-
-        .contact-card {
-          flex: 1 1 100%;
-        }
-      }
-
-      /* Animation */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .animated {
-        animation: fadeIn 0.8s ease-out forwards;
-      }
-
-      .delay-1 {
-        animation-delay: 0.2s;
-      }
-      .delay-2 {
-        animation-delay: 0.4s;
-      }
-      .delay-3 {
-        animation-delay: 0.6s;
-      }
-
-      /* Améliorations formulaire */
-      .form-header {
-        text-align: center;
-        margin-bottom: 30px;
-      }
-
-      .form-header p {
-        color: #7f8c8d;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-
-      .required-field::after {
-        content: " *";
-        color: var(--accent-color);
-      }
-
-      .form-note {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-top: 5px;
-        display: block;
-      }
-
-      /* Style pour les champs invalides */
-      input:invalid,
-      select:invalid,
-      textarea:invalid {
-        border-color: #e74c3c;
-      }
-
-      input:invalid:focus,
-      select:invalid:focus,
-      textarea:invalid:focus {
-        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
-      }
-
-      /* Confirmation de réservation */
-      .confirmation-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
-        z-index: 2000;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .confirmation-content {
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        max-width: 500px;
-        width: 90%;
-        animation: fadeIn 0.5s ease-out;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      }
-
-      .confirmation-content h3 {
-        color: var(--primary-color);
-        margin: 0 0 20px;
-        text-align: center;
-        font-size: 1.6rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      .confirmation-details {
-        background: #f9f9f9;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 20px 0;
-        border: 1px solid #eee;
-      }
-
-      .confirmation-details p {
-        margin: 10px 0;
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.95rem;
-      }
-
-      .confirmation-details p span:last-child {
-        font-weight: bold;
-        color: var(--dark-color);
-      }
-
-      .confirmation-total {
-        font-size: 1.2rem;
-        color: var(--accent-color);
-        text-align: right;
-        margin-top: 15px;
-        font-weight: bold;
-      }
-
-      .close-modal {
-        background: var(--secondary-color);
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        display: block;
-        margin: 20px auto 0;
-        transition: all 0.3s ease;
-        font-weight: 500;
-      }
-
-      .close-modal:hover {
-        background: var(--primary-color);
-        transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      /* Success Modal */
+      /* MODALS */
+      .confirmation-modal,
       .success-modal {
         display: none;
         position: fixed;
@@ -758,393 +637,1023 @@
         z-index: 2000;
         align-items: center;
         justify-content: center;
+        padding: 20px;
       }
 
+      .confirmation-content,
       .success-content {
         background: white;
         padding: 30px;
-        border-radius: 10px;
-        max-width: 400px;
-        width: 90%;
-        text-align: center;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 100%;
         animation: fadeIn 0.5s ease-out;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        max-height: 90vh;
+        overflow-y: auto;
       }
 
-      .success-content i {
-        font-size: 3rem;
-        margin-bottom: 15px;
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
       }
 
+      .confirmation-content h3,
       .success-content h3 {
         color: var(--primary-color);
-        margin: 0 0 15px;
-        font-size: 1.5rem;
-      }
-
-      .success-content p {
-        color: #7f8c8d;
         margin: 0 0 20px;
-        font-size: 1rem;
-      }
-
-      .close-success-modal {
-        background: var(--promo-color);
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 500;
-      }
-
-      .close-success-modal:hover {
-        background: var(--secondary-color);
-        transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      .sidebar-header {
+        text-align: center;
+        font-size: 1.5rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-direction: column;
-        padding: 20px 10px;
+        gap: 10px;
       }
 
-      .logo-container {
+      .confirmation-details {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border: 2px solid #eee;
+      }
+
+      .confirmation-details p {
+        margin: 12px 0;
         display: flex;
-        align-items: center;
+        justify-content: space-between;
+        font-size: 0.95rem;
+      }
+
+      .confirmation-details p span:first-child {
+        color: #777;
+      }
+
+      .confirmation-details p span:last-child {
+        font-weight: bold;
+        color: var(--dark-color);
+      }
+
+      .confirmation-total {
+        font-size: 1.3rem;
+        color: var(--accent-color);
+        text-align: center;
+        margin-top: 15px;
+        font-weight: bold;
+      }
+
+      .close-modal,
+      .close-success-modal {
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: block;
+        margin: 20px auto 0;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .close-modal:hover,
+      .close-success-modal:hover {
+        background: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .success-content i {
+        font-size: 3.5rem;
+        color: var(--promo-color);
         margin-bottom: 15px;
       }
 
-      .logo-img {
-        width: 200px;
-        height: 200px;
-        border-radius: 100%;
-        object-fit: cover;
-        margin-right: 20px;
+      /* FOOTER */
+      footer {
+        background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+        color: var(--light-color);
+        text-align: center;
+        padding: 30px 20px;
+        margin-top: 50px;
+        border-radius: 12px;
       }
 
-      .sidebar-header h1 {
+      footer p {
         margin: 0;
-        font-size: 1.3rem;
-        background: linear-gradient(
-          to right,
-          var(--secondary-color),
-          var(--light-color)
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-align: center;
       }
-      
+
+      /* SECTION TITLES */
+      section > h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: var(--primary-color);
+        font-size: 2rem;
+        position: relative;
+        padding-bottom: 15px;
+      }
+
+      section > h2::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: var(--secondary-color);
+        margin: 15px auto 0;
+      }
+
+      /* RESPONSIVE DESIGN */
+      @media (max-width: 992px) {
+        :root {
+          --sidebar-width: 250px;
+        }
+
+        .hero h2 {
+          font-size: 2rem;
+        }
+
+        .product-container {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .mobile-header {
+          display: flex;
+        }
+
+        .sidebar {
+          transform: translateX(-100%);
+          width: 280px;
+        }
+
+        .sidebar.active {
+          transform: translateX(0);
+        }
+
+        .main-content {
+          margin-left: 0;
+          width: 100%;
+          padding: 15px;
+          margin-top: var(--mobile-header-height);
+        }
+
+        .hero {
+          min-height: 300px;
+          margin-bottom: 25px;
+        }
+
+        .hero h2 {
+          font-size: 1.6rem;
+        }
+
+        .hero p {
+          font-size: 1rem;
+        }
+
+        .hero-logo {
+          width: 80px;
+          height: 80px;
+        }
+
+        .promo-banner h3 {
+          font-size: 1.1rem;
+        }
+
+        .promo-banner p {
+          font-size: 0.9rem;
+        }
+
+        .product-image {
+          height: 220px;
+        }
+
+        .form-section {
+          padding: 25px 20px;
+        }
+
+        .form-section h2 {
+          font-size: 1.5rem;
+        }
+
+        form {
+          grid-template-columns: 1fr;
+        }
+
+        .map-container {
+          height: 350px;
+        }
+
+        .map-title {
+          font-size: 0.85rem;
+          padding: 10px 15px;
+        }
+
+        .contact-info {
+          grid-template-columns: 1fr;
+        }
+
+        section > h2 {
+          font-size: 1.6rem;
+        }
+
+        .confirmation-content,
+        .success-content {
+          padding: 25px 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .mobile-logo h1 {
+          font-size: 0.95rem;
+        }
+
+        .mobile-logo img {
+          width: 40px;
+          height: 40px;
+        }
+
+        .hero {
+          min-height: 250px;
+        }
+
+        .hero h2 {
+          font-size: 1.4rem;
+        }
+
+        .hero-logo {
+          width: 70px;
+          height: 70px;
+        }
+
+        .product-info {
+          padding: 20px;
+        }
+
+        .form-section {
+          padding: 20px 15px;
+        }
+
+        .lang-switcher {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .lang-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      /* ANIMATIONS */
+      .animated {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .delay-1 { animation-delay: 0.2s; }
+      .delay-2 { animation-delay: 0.4s; }
+      .delay-3 { animation-delay: 0.6s; }
+
+      /* OVERLAY pour mobile */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+
+      .sidebar-overlay.active {
+        display: block;
+      }
+      /* ===== ESPACE VIDEOS ===== */
+.video-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.video-item {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.video-item:hover {
+  transform: translateY(-8px);
+}
+
+.video-item video,
+.video-item iframe {
+  width: 100%;
+  height: 220px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.video-item span {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .video-item video,
+  .video-item iframe {
+    height: 200px;
+  }
+}
+/* ================= VIDEO PREMIUM ================= */
+.video-section {
+  margin-bottom: 70px;
+}
+
+.video-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.video-header h2 {
+  font-size: 2rem;
+}
+
+.video-header p {
+  color: #666;
+  max-width: 600px;
+  margin: 10px auto 0;
+}
+
+/* GRID */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 35px;
+}
+
+/* CARD */
+.video-card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.18);
+}
+
+/* THUMB */
+.video-thumb {
+  position: relative;
+  height: 230px;
+  overflow: hidden;
+}
+
+.video-thumb video,
+.video-thumb iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* PLAY BUTTON */
+.play-btn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0.35)
+  );
+  color: white;
+  font-size: 3rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  cursor: pointer;
+}
+
+.video-card:hover .play-btn {
+  opacity: 1;
+}
+
+.play-btn i {
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  padding: 22px 26px;
+  backdrop-filter: blur(6px);
+}
+
+/* INFO */
+.video-info {
+  padding: 20px;
+  text-align: center;
+}
+
+.video-info h3 {
+  color: var(--primary-color);
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
+.video-info span {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .video-thumb {
+    height: 200px;
+  }
+  .video-header h2 {
+    font-size: 1.6rem;
+  }
+}
+/* ===== WHATSAPP FLOAT ===== */
+.whatsapp-float {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  z-index: 3000;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+}
+/* ========== AJOUTEZ CE CSS DANS VOTRE BALISE <style> ========== */
+
+/* SECTION VIDÉO */
+.video-section {
+  margin-bottom: 70px;
+}
+
+.video-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.video-header h2 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.video-header h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: var(--secondary-color);
+  margin: 15px auto 0;
+}
+
+.video-header p {
+  color: #666;
+  max-width: 600px;
+  margin: 10px auto 0;
+}
+
+/* GRILLE VIDÉOS */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 35px;
+}
+
+/* CARTE VIDÉO */
+.video-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+}
+
+.video-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
+}
+
+/* THUMBNAIL VIDÉO */
+.video-thumb {
+  position: relative;
+  height: 230px;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* BOUTON PLAY OVERLAY */
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.35)
+  );
+  color: white;
+  font-size: 3rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.video-card:hover .play-overlay {
+  opacity: 1;
+}
+
+.play-overlay i {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  padding: 22px 26px;
+  backdrop-filter: blur(6px);
+}
+
+/* INFO VIDÉO */
+.video-info {
+  padding: 20px;
+  text-align: center;
+}
+
+.video-info h3 {
+  color: var(--primary-color);
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
+.video-info span {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* MODAL VIDÉO PLEIN ÉCRAN */
+.video-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.video-modal.active {
+  display: flex;
+}
+
+.video-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+.video-modal video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* BOUTON FERMER */
+.close-video {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.close-video:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 768px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .video-thumb {
+    height: 200px;
+  }
+
+  .video-header h2 {
+    font-size: 1.6rem;
+  }
+}
     </style>
-  </head>
-  <body>
-    
-    <!-- Sidebar de navigation -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+      <div class="mobile-logo">
+        <img src="kelibia.png" alt="Paddle Kelibia" />
         <h1>Paddle Kelibia Summer</h1>
-        
       </div>
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+    </header>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <img src="kelibia.png" alt="Paddle Kelibia" class="logo-img" />
+        </div>
+        <h1 data-fr="Paddle Kelibia Summer" data-it="Paddle Kelibia Estate">Paddle Kelibia Summer</h1>
+      </div>
+      
       <nav class="sidebar-nav">
         <ul>
           <li>
-            <a href="#reservation" class="active"
-              ><i class="fas fa-calendar-alt"></i> <span>Réservation</span></a
-            >
+            <a href="#reservation" class="active nav-link">
+              <i class="fas fa-calendar-alt"></i>
+              <span data-fr="Réservation" data-it="Prenotazione">Réservation</span>
+            </a>
           </li>
           <li>
-            <a href="#localisation"
-              ><i class="fas fa-map-marked-alt"></i>
-              <span>Localisation</span></a
-            >
+  <a href="#videos" class="nav-link">
+    <i class="fas fa-video"></i>
+    <span data-fr="Vidéos" data-it="Video">Vidéos</span>
+  </a>
+</li>
+
+          <li>
+            <a href="#localisation" class="nav-link">
+              <i class="fas fa-map-marked-alt"></i>
+              <span data-fr="Localisation" data-it="Posizione">Localisation</span>
+            </a>
           </li>
           <li>
-            <a href="#contact"
-              ><i class="fas fa-phone-alt"></i> <span>Contact</span></a
-            >
+            <a href="#contact" class="nav-link">
+              <i class="fas fa-phone-alt"></i>
+              <span data-fr="Contact" data-it="Contatto">Contact</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://www.instagram.com/paddle.kelibia_summer?igsh=dmUyNWZqZ2Z2ZnQ4" target="_blank">
+              <i class="fab fa-instagram"></i>
+              <span>Instagram</span>
+            </a>
           </li>
           <li>
-            <a
-              href="https://www.instagram.com/paddle.kelibia_summer?igsh=dmUyNWZqZ2Z2ZnQ4 "
-              target="_blank"
-              ><i class="fab fa-instagram"></i> <span>Instagram</span></a
-            >
-          </li>
-          <li>
-            <a
-              href="https://www.facebook.com/profile.php?id=61557485246643&mibextid=LQQJ4d"
-              target="_blank"
-              ><i class="fab fa-facebook-f"></i> <span>Facebook</span></a
-            >
+            <a href="https://www.facebook.com/profile.php?id=61557485246643&mibextid=LQQJ4d" target="_blank">
+              <i class="fab fa-facebook-f"></i>
+              <span>Facebook</span>
+            </a>
           </li>
         </ul>
       </nav>
+
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="fr">
+          <img src="https://flagcdn.com/fr.svg" alt="Français" width="20" height="15" />
+          <span>Français</span>
+        </button>
+        <button class="lang-btn" data-lang="it">
+          <img src="https://flagcdn.com/it.svg" alt="Italiano" width="20" height="15" />
+          <span>Italiano</span>
+        </button>
+      </div>
+
       <div class="sidebar-footer">
-        <p>© 2025 Paddle Kelibia</p>
+        <p>© <span id="year">2025</span> Paddle Kelibia</p>
       </div>
     </aside>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main class="main-content">
       <div class="container">
-  <section class="hero animated">
-    <div class="hero-content">
-      <img src="kelibia.png" alt="Kelibia" class="logo-img" />
-
-      <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-        <!-- Drapeau tunisien à gauche -->
+        <!-- Hero Section -->
+        <section class="hero animated">
+          <div class="hero-content">
+            <img src="kelibia.png" alt="Kelibia" class="hero-logo" />
+            
+            <h4 data-fr="Location de Paddle à Plage El Belge" data-it="Noleggio SUP a Plage El Belge">
+               <!-- Drapeau tunisien à gauche -->
         <a href="?lang=tn">
           <img src="https://flagcdn.com/tn.svg" alt="Tunisien" width="30" height="20" />
         </a>
-
-        <!-- Titre principal -->
-        <h2 style="margin: 0;">Location de Paddle à Plage El Belge</h2>
-
-        <!-- Drapeau italien à droite -->
-        <a href="?lang=it">
+Location de Paddle à Plage El Belge <a href="?lang=it">
           <img src="https://flagcdn.com/it.svg" alt="Italiano" width="30" height="20" />
         </a>
-      </div>
-
-      <p>
-        Découvrez les eaux cristallines de Kelibia avec nos paddles
-        gonflables haut de gamme
-      </p>
-    </div>
-  </section>
-</div>
-
+            </h2>
+            <p data-fr="Découvrez les eaux cristallines de Kelibia avec nos paddles gonflables haut de gamme" 
+               data-it="Scopri le acque cristalline di Kelibia con i nostri SUP gonfiabili di alta qualità">
+              Découvrez les eaux cristallines de Kelibia avec nos paddles gonflables haut de gamme
+            </p>
+          </div>
         </section>
+<!-- ESPACE VIDEOS PREMIUM -->
+<!-- SECTION VIDÉOS PREMIUM -->
+<section id="videos" class="video-section animated delay-2">
+  <div class="video-header">
+    <h2 data-fr="Nos Sessions Paddle en Vidéo" data-it="Le Nostre Sessioni SUP in Video">
+      Nos Sessions Paddle en Vidéo
+    </h2>
+    <p data-fr="Plongez dans l'expérience Paddle Kelibia Summer" 
+       data-it="Immergiti nell'esperienza Paddle Kelibia Summer">
+      Plongez dans l'expérience Paddle Kelibia Summer
+    </p>
+  </div>
 
-        <!-- Bannière de promotion -->
+  <div class="video-grid">
+    <!-- VIDÉO 1 - DRONE -->
+    <div class="video-card" onclick="openVideo('drone.mp4')">
+      <div class="video-thumb">
+        <video muted preload="metadata">
+          <source src="drone.mp4" type="video/mp4">
+        </video>
+        <div class="play-overlay">
+          <i class="fas fa-play"></i>
+        </div>
+      </div>
+      <div class="video-info">
+        <h3>🚁 Vue Aérienne Drone</h3>
+        <span>Plage El Belge • Kelibia</span>
+      </div>
+    </div>
+
+    <!-- VIDÉO 2 - INITIATION -->
+    <div class="video-card" onclick="openVideo('Initiation.mp4')">
+      <div class="video-thumb">
+        <video muted preload="metadata">
+          <source src="Initiation.mp4" type="video/mp4">
+        </video>
+        <div class="play-overlay">
+          <i class="fas fa-play"></i>
+        </div>
+      </div>
+      <div class="video-info">
+        <h3>🏄 Session Initiation</h3>
+        <span>Paddle Kelibia Summer</span>
+      </div>
+    </div>
+
+    <!-- VIDÉO 3 - HUSKY -->
+    <div class="video-card" onclick="openVideo('Husky.mp4')">
+      <div class="video-thumb">
+        <video muted preload="metadata">
+          <source src="Husky.mp4" type="video/mp4">
+        </video>
+        <div class="play-overlay">
+          <i class="fas fa-play"></i>
+        </div>
+      </div>
+      <div class="video-info">
+        <h3>🐺 Paddle avec Husky</h3>
+        <span>Moments inoubliables</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL VIDÉO PLEIN ÉCRAN (À placer avant </body>) -->
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-content">
+    <button class="close-video" onclick="closeVideo()">
+      <i class="fas fa-times"></i>
+    </button>
+    <video id="modalVideo" controls>
+      <source src="" type="video/mp4">
+    </video>
+  </div>
+</div>
+</section>
+
+
+        <!-- Promo Banner -->
         <div class="promo-banner animated delay-1">
-          <h3><i class="fas fa-tag"></i> PROMOTION SPÉCIALE ÉTÉ 2025</h3>
-          <p>
+          <h3>
+            <i class="fas fa-tag"></i>
+            <span data-fr="PROMOTION SPÉCIALE ÉTÉ 2025" data-it="PROMOZIONE SPECIALE ESTATE 2025">
+              PROMOTION SPÉCIALE ÉTÉ 2025
+            </span>
+          </h3>
+          <p data-fr="Location de groupe - 10% de réduction à partir de 3 paddles réservés" 
+             data-it="Noleggio di gruppo - 10% di sconto a partire da 3 SUP prenotati">
             Location de groupe - 10% de réduction à partir de 3 paddles réservés
           </p>
         </div>
 
+        <!-- Reservation Section -->
         <section id="reservation" class="animated delay-1">
           <div class="product-container">
             <div class="product">
               <div class="product-image">
-                <span class="product-badge">PROMO</span>
+                <span class="product-badge" data-fr="PROMO" data-it="OFFERTA">PROMO</span>
                 <img src="pad.jpg" alt="Paddle Gonflable" />
               </div>
               <div class="product-info">
-                <h2>Paddle Gonflable Premium</h2>
-                <div>
-                  
-                  <span class="price">30,00 DT/heure</span>
-                </div>
-                <p>
-                  Profitez d'une expérience unique en mer avec nos paddles
-                  gonflables haut de gamme, stables et faciles à utiliser pour
-                  tous les niveaux.
+                <h2 data-fr="Paddle Gonflable Premium" data-it="SUP Gonfiabile Premium">
+                  Paddle Gonflable Premium
+                </h2>
+                <span class="price">30,00 DT/heure</span>
+                <p data-fr="Profitez d'une expérience unique en mer avec nos paddles gonflables haut de gamme, stables et faciles à utiliser pour tous les niveaux." 
+                   data-it="Goditi un'esperienza unica in mare con i nostri SUP gonfiabili di alta qualità, stabili e facili da usare per tutti i livelli.">
+                  Profitez d'une expérience unique en mer avec nos paddles gonflables haut de gamme, stables et faciles à utiliser pour tous les niveaux.
                 </p>
                 <ul>
                   <li>
-                    <i class="fas fa-check-circle"></i> Matériel professionnel
+                    <i class="fas fa-check-circle"></i>
+                    <span data-fr="Matériel professionnel" data-it="Attrezzatura professionale">Matériel professionnel</span>
                   </li>
                   <li>
-                    <i class="fas fa-check-circle"></i> Équipement de sécurité
-                    inclus
+                    <i class="fas fa-check-circle"></i>
+                    <span data-fr="Équipement de sécurité inclus" data-it="Equipaggiamento di sicurezza incluso">Équipement de sécurité inclus</span>
                   </li>
                   <li>
-                    <i class="fas fa-check-circle"></i> Initiation gratuite
+                    <i class="fas fa-check-circle"></i>
+                    <span data-fr="Initiation gratuite" data-it="Iniziazione gratuita">Initiation gratuite</span>
                   </li>
                   <li>
-                    <i class="fas fa-check-circle"></i> Service sur la plage
+                    <i class="fas fa-check-circle"></i>
+                    <span data-fr="Service sur la plage" data-it="Servizio sulla spiaggia">Service sur la plage</span>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
 
+          <!-- Reservation Form -->
           <div class="form-section">
             <div class="form-header">
-              <h2>Réservez votre session</h2>
-              <p>
-                Remplissez ce formulaire pour réserver votre paddle. Nous vous
-                contacterons pour confirmer votre réservation.
+              <h2 data-fr="Réservez votre session" data-it="Prenota la tua sessione">Réservez votre session</h2>
+              <p data-fr="Remplissez ce formulaire pour réserver votre paddle. Nous vous contacterons pour confirmer votre réservation." 
+                 data-it="Compila questo modulo per prenotare il tuo SUP. Ti contatteremo per confermare la tua prenotazione.">
+                Remplissez ce formulaire pour réserver votre paddle. Nous vous contacterons pour confirmer votre réservation.
               </p>
             </div>
             <form id="reservationForm">
-              <input
-                type="hidden"
-                name="_subject"
-                value="Nouvelle réservation Paddle Kelibia"
-              />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_next" value="#confirmationModal" />
-
               <div class="form-group">
-                <label for="date" class="required-field"
-                  >Date de réservation:</label
-                >
-                <input type="date" id="date" name="date" required min="" />
-                <i class="fas fa-calendar-day input-icon"></i>
+                <label for="date" class="required-field" data-fr="Date de réservation:" data-it="Data di prenotazione:">
+                  Date de réservation:
+                </label>
+                <input type="date" id="date" name="date" required />
               </div>
 
               <div class="form-group">
-                <label for="time" class="required-field"
-                  >Heure de réservation:</label
-                >
-                <input
-                  type="time"
-                  id="time"
-                  name="time"
-                  required
-                  min="06:00"
-                  max="18:00"
-                />
-                <i class="fas fa-clock input-icon"></i>
-                <span class="form-note">Heures d'ouverture: 6h00 - 19h00</span>
+                <label for="time" class="required-field" data-fr="Heure de réservation:" data-it="Orario di prenotazione:">
+                  Heure de réservation:
+                </label>
+                <input type="time" id="time" name="time" required min="06:00" max="18:00" />
+                <span class="form-note" data-fr="Heures d'ouverture: 6h00 - 19h00" data-it="Orari di apertura: 06:00 - 19:00">
+                  Heures d'ouverture: 6h00 - 19h00
+                </span>
               </div>
 
               <div class="form-group">
-                <label for="hours" class="required-field">Durée:</label>
+                <label for="hours" class="required-field" data-fr="Durée:" data-it="Durata:">Durée:</label>
                 <select id="hours" name="hours" required>
-                  <option value="" disabled selected>
+                  <option value="" disabled selected data-fr="Sélectionnez une durée" data-it="Seleziona una durata">
                     Sélectionnez une durée
                   </option>
-                  <option value="1">1 heure - 30 DT</option>
-                  <option value="2">2 heures - 55 DT</option>
-                  <option value="3">3 heures - 80 DT</option>
-                  <option value="4">4 heures - 100 DT</option>
-                  <option value="full">Journée complète - 120 DT</option>
+                  <option value="1" data-fr="1 heure - 30 DT" data-it="1 ora - 30 DT">1 heure - 30 DT</option>
+                  <option value="2" data-fr="2 heures - 55 DT" data-it="2 ore - 55 DT">2 heures - 55 DT</option>
+                  <option value="3" data-fr="3 heures - 80 DT" data-it="3 ore - 80 DT">3 heures - 80 DT</option>
+                  <option value="4" data-fr="4 heures - 100 DT" data-it="4 ore - 100 DT">4 heures - 100 DT</option>
+                  <option value="full" data-fr="Journée complète - 120 DT" data-it="Giornata intera - 120 DT">Journée complète - 120 DT</option>
                 </select>
-                <i class="fas fa-hourglass-half input-icon"></i>
               </div>
 
               <div class="form-group">
-                <label for="paddle-count" class="required-field"
-                  >Nombre de paddles:</label
-                >
+                <label for="paddle-count" class="required-field" data-fr="Nombre de paddles:" data-it="Numero di SUP:">
+                  Nombre de paddles:
+                </label>
                 <div class="quantity-selector">
-                  <button
-                    type="button"
-                    class="quantity-btn"
-                    id="decrease-paddle"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="number"
-                    id="paddle-count"
-                    name="paddle-count"
-                    min="1"
-                    max="10"
-                    value="1"
-                    class="quantity-input"
-                    required
-                  />
-                  <button
-                    type="button"
-                    class="quantity-btn"
-                    id="increase-paddle"
-                  >
-                    +
-                  </button>
+                  <button type="button" class="quantity-btn" id="decrease-paddle">-</button>
+                  <input type="number" id="paddle-count" name="paddle-count" min="1" max="10" value="1" class="quantity-input" required />
+                  <button type="button" class="quantity-btn" id="increase-paddle">+</button>
                 </div>
-                <small
-                  id="group-discount"
-                  style="color: var(--promo-color); display: none"
-                >
-                  <i class="fas fa-check-circle"></i> Promotion groupe appliquée
-                  (-10%)
+                <small id="group-discount">
+                  <i class="fas fa-check-circle"></i>
+                  <span data-fr="Promotion groupe appliquée (-10%)" data-it="Promozione di gruppo applicata (-10%)">
+                    Promotion groupe appliquée (-10%)
+                  </span>
                 </small>
               </div>
 
               <div class="form-group">
-                <label for="prenom" class="required-field">Prénom:</label>
-                <input
-                  type="text"
-                  id="prenom"
-                  name="prenom"
-                  placeholder="Votre prénom"
-                  required
-                />
-                <i class="fas fa-user input-icon"></i>
+                <label for="prenom" class="required-field" data-fr="Prénom:" data-it="Nome:">Prénom:</label>
+                <input type="text" id="prenom" name="prenom" placeholder="Prénom" required />
               </div>
 
               <div class="form-group">
-                <label for="nom" class="required-field">Nom:</label>
-                <input
-                  type="text"
-                  id="nom"
-                  name="nom"
-                  placeholder="Votre nom"
-                  required
-                />
-                <i class="fas fa-user input-icon"></i>
+                <label for="nom" class="required-field" data-fr="Nom:" data-it="Cognome:">Nom:</label>
+                <input type="text" id="nom" name="nom" placeholder="Nom" required />
               </div>
 
               <div class="form-group">
-                <label for="tel" class="required-field">Téléphone:</label>
-                <input
-                  type="tel"
-                  id="tel"
-                  name="tel"
-                  placeholder="Votre numéro de téléphone"
-                  required
-                  pattern="[0-9]{8}"
-                />
-                <i class="fas fa-phone input-icon"></i>
+                <label for="tel" class="required-field" data-fr="Téléphone:" data-it="Telefono:">Téléphone:</label>
+                <input type="tel" id="tel" name="tel" placeholder="12345678" required pattern="[0-9]{8}" />
                 <span class="form-note">Format: 12345678 (8 chiffres)</span>
               </div>
-              <div class="form-group">
-  <label for="client_email" class="required-field">Votre email (pour recevoir la confirmation) :</label>
-  <input 
-    type="email" 
-    id="client_email" 
-    name="client_email" 
-    placeholder="exemple@gmail.com" 
-    required 
-  />
-  <i class="fas fa-envelope input-icon"></i>
-</div>
 
               <div class="form-group">
-                <label for="message">Message (optionnel):</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="3"
-                  placeholder="Informations supplémentaires..."
-                ></textarea>
+                <label for="client_email" class="required-field" data-fr="Votre email:" data-it="La tua email:">
+                  Votre email:
+                </label>
+                <input type="email" id="client_email" name="client_email" placeholder="exemple@gmail.com" required />
               </div>
 
-              <input
-                type="hidden"
-                name="email"
-                value="mrikaaziz0@gmail.com"
-                readonly
-              />
+              <div class="form-group">
+                <label for="message" data-fr="Message (optionnel):" data-it="Messaggio (opzionale):">
+                  Message (optionnel):
+                </label>
+                <textarea id="message" name="message" rows="3" placeholder="Informations supplémentaires..."></textarea>
+              </div>
 
               <button type="submit">
-                <i class="fas fa-paper-plane"></i> Confirmer la réservation
+                <i class="fas fa-paper-plane"></i>
+                <span data-fr="Confirmer la réservation" data-it="Conferma la prenotazione">Confirmer la réservation</span>
               </button>
             </form>
           </div>
         </section>
 
+        <!-- Location Section -->
         <section id="localisation" class="animated delay-2">
-          <h2 style="text-align: center; margin-bottom: 30px">
+          <h2 data-fr="Notre Emplacement à Plage El Belge" data-it="La Nostra Posizione a Plage El Belge">
             Notre Emplacement à Plage El Belge
           </h2>
-          <p style="text-align: center; margin-top: 15px">
-            <i
-              class="fas fa-map-marker-alt"
-              style="color: var(--accent-color)"
-            ></i>
-          </p>
-
           <div class="map-container">
             <div class="map-title">
               <i class="fas fa-map-marker-alt"></i>
@@ -1152,83 +1661,67 @@
             </div>
             <div id="map"></div>
           </div>
-          <p style="text-align: center; margin-top: 15px">
-            <i
-              class="fas fa-map-marker-alt"
-              style="color: var(--accent-color)"
-            ></i>
-            Nous sommes situés directement sur la plage El Belge, près de la
-            zone des activités nautiques
+          <p style="text-align: center; margin-top: 20px; color: #555;">
+            <i class="fas fa-map-marker-alt" style="color: var(--accent-color); margin-right: 8px;"></i>
+            <span data-fr="Nous sommes situés directement sur la plage El Belge, près de la zone des activités nautiques" 
+                  data-it="Siamo situati direttamente sulla spiaggia El Belge, vicino alla zona delle attività nautiche">
+              Nous sommes situés directement sur la plage El Belge, près de la zone des activités nautiques
+            </span>
           </p>
-          <div style="text-align: center; margin-top: 20px">
-            <a
-              href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2603.2333059007966!2d11.086569315596678!3d36.81205997995166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13029329705c9b01%3A0x695cc64b9af7a23a!2sPlage%20Mansourah!5e0!3m2!1sen!2stn!4v1695042533742!5m2!1sen!2stn"
-              target="_blank"
-              class="btn"
-              style="
-                background: var(--secondary-color);
-                color: white;
-                padding: 10px 20px;
-                border-radius: 5px;
-                text-decoration: none;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-              "
-            >
-              <i class="fas fa-directions"></i> Obtenir l'itinéraire
-            </a>
-          </div>
         </section>
 
+        <!-- Contact Section -->
         <section id="contact" class="animated delay-3">
-          <h2 style="text-align: center; margin-bottom: 30px">
-            Contactez-nous
-          </h2>
+          <h2 data-fr="Contactez-nous" data-it="Contattaci">Contactez-nous</h2>
           <div class="contact-info">
             <div class="contact-card">
-              <h3><i class="fas fa-map-marker-alt"></i> Adresse</h3>
+              <h3>
+                <i class="fas fa-map-marker-alt"></i>
+                <span data-fr="Adresse" data-it="Indirizzo">Adresse</span>
+              </h3>
               <p>Plage El Belge, Kelibia</p>
-              <p><small>(Zone des activités nautiques)</small></p>
-              <a href="#localisation"
-                ><i class="fas fa-directions"></i> Voir sur la carte</a
-              >
+              <p><small data-fr="(Zone des activités nautiques)" data-it="(Zona attività nautiche)">(Zone des activités nautiques)</small></p>
+              <a href="#localisation">
+                <i class="fas fa-directions"></i>
+                <span data-fr="Voir sur la carte" data-it="Vedi sulla mappa">Voir sur la carte</span>
+              </a>
             </div>
 
             <div class="contact-card">
-              <h3><i class="fas fa-phone"></i> Téléphone</h3>
+              <h3>
+                <i class="fas fa-phone"></i>
+                <span data-fr="Téléphone" data-it="Telefono">Téléphone</span>
+              </h3>
               <p>+216 28 991 180</p>
-              <p><small>WhatsApp disponible</small></p>
-              <a href="tel:+21628991180"
-                ><i class="fas fa-phone-volume"></i> Appeler maintenant</a
-              >
+              <p><small>WhatsApp</small></p>
+              <a href="tel:+21628991180">
+                <i class="fas fa-phone-volume"></i>
+                <span data-fr="Appeler maintenant" data-it="Chiama ora">Appeler maintenant</span>
+              </a>
             </div>
 
             <div class="contact-card">
-              <h3><i class="fas fa-clock"></i> Horaires</h3>
+              <h3>
+                <i class="fas fa-clock"></i>
+                <span data-fr="Horaires" data-it="Orari">Horaires</span>
+              </h3>
               <p>6h00 - 19h00</p>
-              <p>Tous les jours</p>
-              <p><small>Ouvert toute la saison estivale</small></p>
+              <p data-fr="Tous les jours" data-it="Tutti i giorni">Tous les jours</p>
+              <p><small data-fr="Ouvert toute la saison estivale" data-it="Aperto tutta la stagione estiva">Ouvert toute la saison estivale</small></p>
             </div>
           </div>
         </section>
       </div>
 
+      <!-- Footer -->
       <footer>
-  <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
-    <a href="?lang=tn">
-      <img src="https://flagcdn.com/tn.svg" alt="Tunisien" width="60" height="30" />
-    </a>
-    
-    <p style="text-align: center; flex: 1;">
-      © <span id="year">2025</span> Paddle Kelibia Summer - Location de
-      paddle à Plage El Belge. Tous droits réservés.
-    </p>
-
-    <img src="https://flagcdn.com/it.svg" alt="Italian" width="60" height="30" />
-  </div>
-</footer>
-
+        <p>
+          © <span id="footerYear">2025</span> Paddle Kelibia Summer - 
+          <span data-fr="Location de paddle à Plage El Belge" data-it="Noleggio SUP a Plage El Belge">
+            Location de paddle à Plage El Belge
+          </span>
+        </p>
+      </footer>
     </main>
 
     <!-- Confirmation Modal -->
@@ -1236,452 +1729,300 @@
       <div class="confirmation-content">
         <h3>
           <i class="fas fa-check-circle" style="color: var(--promo-color)"></i>
-          Réservation confirmée !
+          <span data-fr="Réservation confirmée !" data-it="Prenotazione confermata!">Réservation confirmée !</span>
         </h3>
         <div class="confirmation-details" id="reservationDetails"></div>
         <div class="confirmation-total" id="totalPrice"></div>
-        <p style="text-align: center">
-          Nous vous contacterons dans les plus brefs délais pour confirmer votre
-          réservation.
+        <p style="text-align: center; color: #777; margin-top: 15px;" 
+           data-fr="Nous vous contacterons dans les plus brefs délais pour confirmer votre réservation." 
+           data-it="Ti contatteremo il prima possibile per confermare la tua prenotazione.">
+          Nous vous contacterons dans les plus brefs délais pour confirmer votre réservation.
         </p>
-        <button class="close-modal" id="closeModal">Fermer</button>
+        <button class="close-modal" id="closeModal" data-fr="Fermer" data-it="Chiudi">Fermer</button>
       </div>
     </div>
 
     <!-- Success Modal -->
     <div class="success-modal" id="successModal">
       <div class="success-content">
-        <i class="fas fa-check-circle" style="color: var(--promo-color)"></i>
-        <h3>Message envoyé avec succès !</h3>
-        <p>Votre réservation a été transmise. Merci de nous avoir choisis !</p>
+        <i class="fas fa-check-circle"></i>
+        <h3 data-fr="Message envoyé avec succès !" data-it="Messaggio inviato con successo!">
+          Message envoyé avec succès !
+        </h3>
+        <p data-fr="Votre réservation a été transmise. Merci de nous avoir choisis !" 
+           data-it="La tua prenotazione è stata trasmessa. Grazie per averci scelto!">
+          Votre réservation a été transmise. Merci de nous avoir choisis !
+        </p>
         <button class="close-success-modal" id="closeSuccessModal">OK</button>
       </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-      // Mise à jour automatique de l'année
-      document.getElementById("year").textContent = new Date().getFullYear();
-
-      // Initialisation de la carte avec position exacte sur Plage El Belge
-      function initMap() {
-        // Coordonnées précises sur Plage El Belge (près de la zone des activités nautiques)
-        const plageBelge = [36.8475, 11.0939];
-
-        const map = L.map("map").setView(plageBelge, 19); // Zoom très précis
-
-        // Fond de carte plus adapté pour les zones côtières
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution:
-            '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
-
-        // Ajout d'une image aérienne pour plus de précision
-        L.tileLayer(
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-          {
-            attribution:
-              "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics",
-            maxZoom: 19,
+      // Language System
+      let currentLang = 'fr';
+      
+      function switchLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll('[data-fr]').forEach(el => {
+          const text = el.getAttribute(`data-${lang}`);
+          if (text) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+              el.placeholder = text;
+            } else if (el.tagName === 'OPTION') {
+              el.textContent = text;
+            } else {
+              el.textContent = text;
+            }
           }
-        ).addTo(map);
-
-        // Marqueur personnalisé avec icône plus visible
-        const paddleIcon = L.icon({
-          iconUrl: "https://cdn-icons-png.flaticon.com/512/2972/2972035.png",
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-          popupAnchor: [0, -40],
         });
 
-        // Ajout du marqueur à l'emplacement exact
-        const marker = L.marker(plageBelge, {
-          icon: paddleIcon,
-          title: "Paddle Kelibia Summer",
-          alt: "Emplacement de location de paddle",
-          riseOnHover: true,
-        }).addTo(map);
-
-        // Popup avec plus d'informations
-        marker
-          .bindPopup(
-            `
-                <div style="text-align:center;">
-                    <b style="color:${getComputedStyle(
-                      document.documentElement
-                    ).getPropertyValue(
-                      "--primary-color"
-                    )}">Paddle Kelibia Summer</b><br>
-                    <small>Location de paddle gonflable</small><br><br>
-                    <img src="pad.jpg" style="max-width:100%; border-radius:5px;"><br>
-                    <div style="margin-top:10px;">
-                        <i class="fas fa-map-marker-alt" style="color:${getComputedStyle(
-                          document.documentElement
-                        ).getPropertyValue("--accent-color")}"></i> 
-                        Plage El Belge, Kelibia<br>
-                        <small>(Zone des activités nautiques)</small>
-                    </div>
-                    <div style="margin-top:10px;">
-                        <a href="https://www.google.com/maps/dir//36.8475,11.0939" target="_blank" style="background:${getComputedStyle(
-                          document.documentElement
-                        ).getPropertyValue(
-                          "--secondary-color"
-                        )}; color:white; padding:5px 10px; border-radius:5px; text-decoration:none; display:inline-block; margin-top:5px;">
-                            <i class="fas fa-directions"></i> Itinéraire
-                        </a>
-                    </div>
-                </div>
-            `
-          )
-          .openPopup();
-
-        // Ajout d'un cercle pour indiquer la zone précise (20m)
-        L.circle(plageBelge, {
-          color: getComputedStyle(document.documentElement).getPropertyValue(
-            "--secondary-color"
-          ),
-          fillColor: getComputedStyle(
-            document.documentElement
-          ).getPropertyValue("--secondary-color"),
-          fillOpacity: 0.2,
-          radius: 20,
-        })
-          .addTo(map)
-          .bindTooltip("Notre stand de location", {
-            permanent: false,
-            direction: "top",
-          });
-
-        // Ajout d'un polygone pour montrer la zone de plage
-        const beachArea = [
-          [36.8478, 11.0935],
-          [36.8472, 11.0943],
-          [36.8469, 11.0938],
-          [36.8475, 11.093],
-        ];
-
-        L.polygon(beachArea, {
-          color: "#f1c40f",
-          fillColor: "#f39c12",
-          fillOpacity: 0.1,
-          weight: 2,
-        })
-          .addTo(map)
-          .bindTooltip("Zone de plage El Belge", { permanent: false });
-
-        // Ajout d'un contrôle pour basculer entre les vues
-        L.control
-          .layers(
-            {
-              Carte: L.tileLayer(
-                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              ),
-              "Vue satellite": L.tileLayer(
-                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-              ),
-            },
-            null,
-            { position: "topright" }
-          )
-          .addTo(map);
-
-        // Ajout d'un contrôle d'échelle
-        L.control.scale({ position: "bottomleft" }).addTo(map);
+        // Update active language button
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
       }
 
-      // Gestion du formulaire
-      document.addEventListener("DOMContentLoaded", function () {
-        initMap();
+      // Initialize
+      document.addEventListener('DOMContentLoaded', function () {
+        // Year
+        const year = new Date().getFullYear();
+        document.getElementById('year').textContent = year;
+        document.getElementById('footerYear').textContent = year;
 
-        // Définir la date minimale comme aujourd'hui
-        const today = new Date().toISOString().split("T")[0];
-        document.getElementById("date").min = today;
+        // Min date for reservation
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').min = today;
 
-        // Gestion du nombre de paddles
-        const paddleCount = document.getElementById("paddle-count");
-        const decreaseBtn = document.getElementById("decrease-paddle");
-        const increaseBtn = document.getElementById("increase-paddle");
-        const discountNotice = document.getElementById("group-discount");
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-        decreaseBtn.addEventListener("click", function () {
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('active');
+          sidebarOverlay.classList.toggle('active');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+          sidebar.classList.remove('active');
+          sidebarOverlay.classList.remove('active');
+        });
+
+        // Close sidebar on nav link click (mobile)
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+              sidebar.classList.remove('active');
+              sidebarOverlay.classList.remove('active');
+            }
+          });
+        });
+
+        // Language switcher
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            switchLanguage(btn.dataset.lang);
+          });
+        });
+
+        // Active nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', function() {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+          });
+        });
+
+        // Paddle counter
+        const paddleCount = document.getElementById('paddle-count');
+        const decreaseBtn = document.getElementById('decrease-paddle');
+        const increaseBtn = document.getElementById('increase-paddle');
+        const discountNotice = document.getElementById('group-discount');
+
+        function updateDiscountNotice() {
+          discountNotice.style.display = parseInt(paddleCount.value) >= 3 ? 'block' : 'none';
+        }
+
+        decreaseBtn.addEventListener('click', () => {
           if (parseInt(paddleCount.value) > 1) {
             paddleCount.value = parseInt(paddleCount.value) - 1;
             updateDiscountNotice();
           }
         });
 
-        increaseBtn.addEventListener("click", function () {
+        increaseBtn.addEventListener('click', () => {
           if (parseInt(paddleCount.value) < 10) {
             paddleCount.value = parseInt(paddleCount.value) + 1;
             updateDiscountNotice();
           }
         });
 
-        paddleCount.addEventListener("change", function () {
+        paddleCount.addEventListener('change', function() {
           if (this.value < 1) this.value = 1;
           if (this.value > 10) this.value = 10;
           updateDiscountNotice();
         });
 
-        function updateDiscountNotice() {
-          if (parseInt(paddleCount.value) >= 3) {
-            discountNotice.style.display = "block";
-          } else {
-            discountNotice.style.display = "none";
-          }
-        }
+        // Map initialization
+        const plageBelge = [36.8475, 11.0939];
+        const map = L.map('map').setView(plageBelge, 17);
 
-        // Gestion du formulaire
-        document
-          .getElementById("reservationForm")
-          .addEventListener("submit", function (event) {
-            event.preventDefault();
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-            // Extraction manuelle des valeurs des champs
-            const data = {
-              _subject: document.querySelector('input[name="_subject"]').value,
-              _template: document.querySelector('input[name="_template"]')
-                .value,
-              _next: document.querySelector('input[name="_next"]').value,
-              date: document.getElementById("date").value,
-              time: document.getElementById("time").value,
-              hours: document.getElementById("hours").value,
-              "paddle-count": document.getElementById("paddle-count").value,
-              prenom: document.getElementById("prenom").value,
-              nom: document.getElementById("nom").value,
-              tel: document.getElementById("tel").value,
-              message: document.getElementById("message").value || "",
-              email: document.querySelector('input[name="email"]').value,
-            };
+        const marker = L.marker(plageBelge).addTo(map);
+        marker.bindPopup('<b>Paddle Kelibia Summer</b><br>Plage El Belge').openPopup();
 
-            // Log form data for debugging
-            console.log("Form Data to Send:", data);
+        // Form submission
+        document.getElementById('reservationForm').addEventListener('submit', function(e) {
+          e.preventDefault();
 
-            // Calcul du prix avec promotions
-            const hours = data["hours"];
-            const paddleCount = parseInt(data["paddle-count"]);
-            let basePrice = 0;
-            let durationText = "";
-            let discount = 0;
-            let groupDiscountApplied = false;
+          const data = {
+            prenom: document.getElementById('prenom').value.trim(),
+            nom: document.getElementById('nom').value.trim(),
+            client_email: document.getElementById('client_email').value.trim(),
+            tel: document.getElementById('tel').value,
+            date: document.getElementById('date').value,
+            time: document.getElementById('time').value,
+            hours: document.getElementById('hours').value,
+            paddleCount: parseInt(document.getElementById('paddle-count').value),
+            message: document.getElementById('message').value.trim() || (currentLang === 'fr' ? 'Aucun message' : 'Nessun messaggio')
+          };
 
-            // Calcul du prix de base selon la durée
-            switch (hours) {
-              case "1":
-                basePrice = 30;
-                durationText = "1 heure";
-                break;
-              case "2":
-                basePrice = 55;
-                durationText = "2 heures";
-                break;
-              case "3":
-                basePrice = 80;
-                durationText = "3 heures";
-                break;
-              case "4":
-                basePrice = 100;
-                durationText = "4 heures";
-                break;
-              case "full":
-                basePrice = 120;
-                durationText = "Journée complète";
-                break;
-            }
+          const prix = { "1": 30, "2": 55, "3": 80, "4": 100, "full": 120 };
+          const prixBase = prix[data.hours];
+          const reduction = data.paddleCount >= 3 ? 0.1 : 0;
+          const total = (prixBase * data.paddleCount * (1 - reduction)).toFixed(2);
+          
+          const dureeTexte = data.hours === "full" 
+            ? (currentLang === 'fr' ? "Journée complète" : "Giornata intera")
+            : `${data.hours} ${currentLang === 'fr' ? 'heure' : 'ora'}${data.hours > 1 ? 's' : ''}`;
 
-            // Application de la promotion groupe si applicable
-            if (paddleCount >= 3) {
-              discount += 0.1;
-              groupDiscountApplied = true;
-            }
+          const labels = currentLang === 'fr' 
+            ? { client: 'Client', email: 'Email', tel: 'Tél', date: 'Date', duree: 'Durée', paddles: 'Paddles', promo: 'Promotion groupe -10% appliquée !', total: 'Total à payer' }
+            : { client: 'Cliente', email: 'Email', tel: 'Tel', date: 'Data', duree: 'Durata', paddles: 'SUP', promo: 'Promozione di gruppo -10% applicata!', total: 'Totale da pagare' };
 
-            const totalPrice = basePrice * paddleCount * (1 - discount);
-            const savings = basePrice * paddleCount - totalPrice;
+          document.getElementById('reservationDetails').innerHTML = `
+            <p><span>${labels.client}:</span> <strong>${data.prenom} ${data.nom}</strong></p>
+            <p><span>${labels.email}:</span> <strong>${data.client_email}</strong></p>
+            <p><span>${labels.tel}:</span> <strong>${data.tel}</strong></p>
+            <p><span>${labels.date}:</span> <strong>${data.date} à ${data.time}</strong></p>
+            <p><span>${labels.duree}:</span> <strong>${dureeTexte}</strong></p>
+            <p><span>${labels.paddles}:</span> <strong>${data.paddleCount}</strong></p>
+            ${reduction ? `<p style="color:var(--promo-color)"><strong>${labels.promo}</strong></p>` : ''}
+          `;
+          
+          document.getElementById('totalPrice').innerHTML = `${labels.total}: <strong style="font-size:1.5em;color:var(--accent-color)">${total} DT</strong>`;
+          document.getElementById('confirmationModal').style.display = 'flex';
 
-            // Afficher les détails dans le modal de confirmation
-            const detailsDiv = document.getElementById("reservationDetails");
-            detailsDiv.innerHTML = `
-              <p><span>Nom:</span> <span>${data["prenom"]} ${
-              data["nom"]
-            }</span></p>
-              <p><span>Téléphone:</span> <span>${data["tel"]}</span></p>
-              <p><span>Email:</span> <span>${data["email"]}</span></p>
-              <p><span>Date:</span> <span>${data["date"]} à ${
-              data["time"]
-            }</span></p>
-              <p><span>Durée:</span> <span>${durationText}</span></p>
-              <p><span>Nombre de paddles:</span> <span>${paddleCount}</span></p>
-              ${
-                groupDiscountApplied
-                  ? '<p><span style="color:var(--promo-color);">Promotion groupe:</span> <span>-10%</span></p>'
-                  : ""
-              }
-              ${
-                savings > 0
-                  ? `<p><span>Économies:</span> <span>${savings.toFixed(
-                      2
-                    )} DT</span></p>`
-                  : ""
-              }
-              ${
-                data["message"]
-                  ? `<p><span>Message:</span> <span>${data["message"]}</span></p>`
-                  : ""
-              }
-            `;
+          document.getElementById('closeModal').onclick = function() {
+            document.getElementById('confirmationModal').style.display = 'none';
 
-            document.getElementById(
-              "totalPrice"
-            ).innerHTML = `Total: <span style="font-size:1.3em;">${totalPrice.toFixed(
-              2
-            )} DT</span>`;
+            // Send emails
+            emailjs.send("service_vfzpwsf", "template_g8q6pef", {
+              prenom: data.prenom,
+              nom: data.nom,
+              client_email: data.client_email,
+              tel: data.tel,
+              date: data.date,
+              time: data.time,
+              hours: dureeTexte,
+              paddleCount: data.paddleCount,
+              message: data.message,
+              totalPrice: total + " DT"
+            });
 
-            // Afficher le modal de confirmation
-            document.getElementById("confirmationModal").style.display = "flex";
+            emailjs.send("service_6t6otur", "template_fnvhqvu", {
+              prenom: data.prenom,
+              nom: data.nom,
+              client_email: data.client_email,
+              date: data.date,
+              time: data.time,
+              duration: dureeTexte,
+              paddleCount: data.paddleCount,
+              totalPrice: total + " DT",
+              message: data.message
+            }).then(() => {
+              document.getElementById('successModal').style.display = 'flex';
+              document.getElementById('reservationForm').reset();
+              paddleCount.value = 1;
+              updateDiscountNotice();
+            });
+          };
+        });
 
-            // Gérer la fermeture du modal de confirmation
-            document
-              .getElementById("closeModal")
-              .addEventListener("click", function () {
-                document.getElementById("confirmationModal").style.display =
-                  "none";
-                // Obtenir la date et l'heure actuelles au format souhaité
-                const now = new Date();
-                const currentDateTime = now.toLocaleString("fr-FR", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                });
-                // Envoyer l'e-mail avec EmailJS
-                emailjs
-                  .send("service_vfzpwsf", "template_g8q6pef", {
-                    prenom: data.prenom,
-                    nom: data.nom,
-                    tel: data.tel,
-                    email: data.email,
-                    date: data.date,
-                    time: data.time,
-                    hours: data.hours,
-                    paddleCount: data["paddle-count"], // Match the form field name
-                    message: data.message || "",
-                  })
-                  .then(
-                    function (response) {
-                      console.log("Email sent successfully:", response);
-                      // Afficher le modal de succès
-                      document.getElementById("successModal").style.display =
-                        "flex";
-                      // Réinitialiser le formulaire
-                      document.getElementById("reservationForm").reset();
-                      paddleCount.value = 1;
-                      updateDiscountNotice();
-                      document.getElementById("date").min = today;
-                    },
-                    function (error) {
-                      console.error("Email sending failed:", error);
-                      alert("Erreur lors de l'envoi: " + error.text);
-                    }
-                  );
-              });
-          });
-
-        // Gérer la fermeture du modal de succès
-        document
-          .getElementById("closeSuccessModal")
-          .addEventListener("click", function () {
-            document.getElementById("successModal").style.display = "none";
-          });
-
-        // Gestion du menu actif
-        document.querySelectorAll(".sidebar-nav a").forEach((link) => {
-          link.addEventListener("click", function () {
-            document
-              .querySelectorAll(".sidebar-nav a")
-              .forEach((el) => el.classList.remove("active"));
-            this.classList.add("active");
-          });
+        document.getElementById('closeSuccessModal').addEventListener('click', () => {
+          document.getElementById('successModal').style.display = 'none';
         });
       });
-      document.getElementById("reservationForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+      // Fonction pour ouvrir la vidéo en plein écran
+function openVideo(videoSrc) {
+  const modal = document.getElementById('videoModal');
+  const modalVideo = document.getElementById('modalVideo');
+  
+  modalVideo.querySelector('source').src = videoSrc;
+  modalVideo.load();
+  modal.classList.add('active');
+  modalVideo.play();
+}
 
-  const data = {
-    prenom: document.getElementById("prenom").value.trim(),
-    nom: document.getElementById("nom").value.trim(),
-    client_email: document.getElementById("client_email").value.trim(),
-    tel: document.getElementById("tel").value,
-    date: document.getElementById("date").value,
-    time: document.getElementById("time").value,
-    hours: document.getElementById("hours").value,
-    paddleCount: parseInt(document.getElementById("paddle-count").value),
-    message: document.getElementById("message").value.trim() || "Aucun message"
-  };
+// Fonction pour fermer la vidéo
+function closeVideo() {
+  const modal = document.getElementById('videoModal');
+  const modalVideo = document.getElementById('modalVideo');
+  
+  modalVideo.pause();
+  modalVideo.currentTime = 0;
+  modal.classList.remove('active');
+}
 
-  // Calcul du prix
-  const prix = { "1": 30, "2": 55, "3": 80, "4": 100, "full": 120 };
-  const prixBase = prix[data.hours];
-  const reduction = data.paddleCount >= 3 ? 0.1 : 0;
-  const total = (prixBase * data.paddleCount * (1 - reduction)).toFixed(2);
-  const dureeTexte = data.hours === "full" ? "Journée complète" : `${data.hours} heure${data.hours > 1 ? "s" : ""}`;
+// Fermer avec la touche Échap
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeVideo();
+  }
+});
 
-  // Affichage dans le modal
-  document.getElementById("reservationDetails").innerHTML = `
-    <p><span>Client :</span> <strong>${data.prenom} ${data.nom}</strong></p>
-    <p><span>Email :</span> <strong>${data.client_email}</strong></p>
-    <p><span>Tél :</span> <strong>${data.tel}</strong></p>
-    <p><span>Date :</span> <strong>${data.date} à ${data.time}</strong></p>
-    <p><span>Durée :</span> <strong>${dureeTexte}</strong></p>
-    <p><span>Paddles :</span> <strong>${data.paddleCount}</strong></p>
-    ${reduction ? '<p style="color:var(--promo-color)"><strong>Promotion groupe -10% appliquée !</strong></p>' : ''}
-  `;
-  document.getElementById("totalPrice").innerHTML = `Total à payer : <strong style="font-size:1.5em;color:var(--accent-color)">${total} DT</strong>`;
-
-  document.getElementById("confirmationModal").style.display = "flex";
-
-  // ENVOI DES EMAILS QUAND LE CLIENT CLIQUE "FERMER"
-  document.getElementById("closeModal").onclick = function () {
-    document.getElementById("confirmationModal").style.display = "none";
-
-    // 1. Email à TOI (propriétaire) - ton template existant
-    emailjs.send("service_vfzpwsf", "template_g8q6pef", {
-      prenom: data.prenom,
-      nom: data.nom,
-      client_email: data.client_email,
-      tel: data.tel,
-      date: data.date,
-      time: data.time,
-      hours: dureeTexte,
-      paddleCount: data.paddleCount,
-      message: data.message,
-      totalPrice: total + " DT"
+// Fermer en cliquant en dehors de la vidéo
+document.getElementById('videoModal').addEventListener('click', (e) => {
+  if (e.target.id === 'videoModal') {
+    closeVideo();
+  }
+});
+document.querySelectorAll(".video-thumb video").forEach(video => {
+    video.addEventListener("mouseenter", () => video.play());
+    video.addEventListener("mouseleave", () => {
+      video.pause();
+      video.currentTime = 0;
     });
+  });
+  
+  function openVideo(src) {
+    const modal = document.getElementById("videoModal");
+    const video = document.getElementById("modalVideo");
 
-    const clientEmail = document.getElementById("client_email").value;
+    video.src = src;
+    video.load();
+    modal.classList.add("active");
+    video.play();
+  }
 
-emailjs.send("service_6t6otur", "template_fnvhqvu", {
-  prenom: data.prenom,
-  nom: data.nom,
-  client_email: data.client_email, // 🔥 OBLIGATOIRE
-  date: data.date,
-  time: data.time,
-  duration: dureeTexte,
-  paddleCount: data.paddleCount,
-  totalPrice: total + " DT",
-  message: data.message
-})
-.then(() => {
-  console.log("Email client envoyé avec succès");
-})
-.catch(error => {
-  console.error("Erreur email client :", error);
-});
+  function closeVideo() {
+    const modal = document.getElementById("videoModal");
+    const video = document.getElementById("modalVideo");
 
+    video.pause();
+    video.currentTime = 0;
+    video.src = "";
+    modal.classList.remove("active");
+  }
 
-  };
-});
     </script>
-  </body>
+    <a href="https://wa.me/21628991180" class="whatsapp-float" target="_blank">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+</body>
 </html>
