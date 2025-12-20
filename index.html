@@ -1049,7 +1049,7 @@
 .play-btn {
   position: absolute;
   inset: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   background: linear-gradient(
@@ -1440,6 +1440,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
     <div class="video-card" onclick="openVideo('drone.mp4')">
       <div class="video-thumb">
         <video muted preload="metadata">
+          <video controls poster="images/video1-thumbnail.jpg"></video>
           <source src="drone.mp4" type="video/mp4">
         </video>
         <div class="play-overlay">
