@@ -1313,6 +1313,53 @@
     font-size: 1.6rem;
   }
 }
+/* Style pour les posters d'images */
+.video-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-thumb {
+  position: relative;
+  height: 230px;
+  overflow: hidden;
+  background: #f0f0f0; /* Fond gris clair au lieu de noir */
+}
+
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex; /* Changé de 'none' à 'flex' */
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.35)
+  );
+  color: white;
+  font-size: 3rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  cursor: pointer;
+}
+
+.video-card:hover .play-overlay {
+  opacity: 1;
+}
+
+.play-overlay i {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  padding: 22px 26px;
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s ease;
+}
+
+.play-overlay:hover i {
+  transform: scale(1.1);
+}
     </style>
 </head>
 <body>
@@ -1439,10 +1486,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
     <!-- VIDÉO 1 - DRONE -->
     <div class="video-card" onclick="openVideo('drone.mp4')">
       <div class="video-thumb">
-        <video muted preload="metadata">
-          <video controls poster="images/video1-thumbnail.jpg"></video>
-          <source src="drone.mp4" type="video/mp4">
-        </video>
+        <img src="C:\locatioPaddle/dronee.PNG" alt="Vue Drone" class="video-poster">
         <div class="play-overlay">
           <i class="fas fa-play"></i>
         </div>
@@ -1456,9 +1500,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
     <!-- VIDÉO 2 - INITIATION -->
     <div class="video-card" onclick="openVideo('Initiation.mp4')">
       <div class="video-thumb">
-        <video muted preload="metadata">
-          <source src="Initiation.mp4" type="video/mp4">
-        </video>
+        <img src="C:\locatioPaddle/init.PNG" alt="Session Initiation" class="video-poster">
         <div class="play-overlay">
           <i class="fas fa-play"></i>
         </div>
@@ -1472,9 +1514,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
     <!-- VIDÉO 3 - HUSKY -->
     <div class="video-card" onclick="openVideo('Husky.mp4')">
       <div class="video-thumb">
-        <video muted preload="metadata">
-          <source src="Husky.mp4" type="video/mp4">
-        </video>
+        <img src="C:\locatioPaddle\huskyy.png" alt="Paddle Husky" class="video-poster">
         <div class="play-overlay">
           <i class="fas fa-play"></i>
         </div>
@@ -1484,7 +1524,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
         <span>Moments inoubliables</span>
       </div>
     </div>
-  </div>
+</div>
 </section>
 
 <!-- MODAL VIDÉO PLEIN ÉCRAN (À placer avant </body>) -->
@@ -1629,10 +1669,17 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
               </div>
 
               <div class="form-group">
-                <label for="client_email" class="required-field" data-fr="Votre email:" data-it="La tua email:">
-                  Votre email:
-                </label>
-                <input type="email" id="client_email" name="client_email" placeholder="exemple@gmail.com" required />
+                <label for="client_email" data-fr="Votre email (optionnel):" data-it="La tua email (facoltativo):">
+  Votre email (optionnel):
+</label>
+                <input 
+    type="email" 
+    id="client_email" 
+    name="client_email" 
+    placeholder="Email pour recevoir la facture de confirmation" 
+    data-fr-placeholder="Email pour recevoir la facture de confirmation"
+    data-it-placeholder="Email per ricevere la fattura di conferma"
+  />
               </div>
 
               <div class="form-group">
@@ -1776,6 +1823,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
               el.textContent = text;
             }
           }
+          
         });
 
         // Update active language button
@@ -1884,7 +1932,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
           const data = {
             prenom: document.getElementById('prenom').value.trim(),
             nom: document.getElementById('nom').value.trim(),
-            client_email: document.getElementById('client_email').value.trim(),
+           client_email: document.getElementById('client_email').value.trim() || 'Non fourni',
             tel: document.getElementById('tel').value,
             date: document.getElementById('date').value,
             time: document.getElementById('time').value,
