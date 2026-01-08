@@ -23,6 +23,9 @@
         --dark-color: #2c3e50;
         --sidebar-width: 280px;
         --mobile-header-height: 70px;
+        --gold-color: #FFD700;
+        --ocean-gradient: linear-gradient(135deg, #1e3c72, #2a5298);
+        --sunset-gradient: linear-gradient(135deg, #ff7e5f, #feb47b);
       }
 
       * {
@@ -40,7 +43,7 @@
         min-height: 100vh;
       }
 
-      /* MOBILE HEADER - Visible uniquement sur mobile */
+      /* MOBILE HEADER */
       .mobile-header {
         display: none;
         position: fixed;
@@ -947,419 +950,694 @@
       .sidebar-overlay.active {
         display: block;
       }
-      /* ===== ESPACE VIDEOS ===== */
-.video-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  margin-bottom: 50px;
-}
 
-.video-item {
-  background: white;
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
+      /* ===== VIDEO SECTION ===== */
+      .video-section {
+        margin-bottom: 70px;
+      }
 
-.video-item:hover {
-  transform: translateY(-8px);
-}
+      .video-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
 
-.video-item video,
-.video-item iframe {
-  width: 100%;
-  height: 220px;
-  border-radius: 10px;
-  object-fit: cover;
-}
+      .video-header h2 {
+        font-size: 2rem;
+        color: var(--primary-color);
+        position: relative;
+        padding-bottom: 15px;
+      }
 
-.video-item span {
-  display: block;
-  margin-top: 10px;
-  font-weight: 600;
-  color: var(--primary-color);
-  text-align: center;
-}
+      .video-header h2::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: var(--secondary-color);
+        margin: 15px auto 0;
+      }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .video-item video,
-  .video-item iframe {
-    height: 200px;
-  }
-}
-/* ================= VIDEO PREMIUM ================= */
-.video-section {
-  margin-bottom: 70px;
-}
+      .video-header p {
+        color: #666;
+        max-width: 600px;
+        margin: 10px auto 0;
+      }
 
-.video-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
+      .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 35px;
+      }
 
-.video-header h2 {
-  font-size: 2rem;
-}
+      .video-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        cursor: pointer;
+      }
 
-.video-header p {
-  color: #666;
-  max-width: 600px;
-  margin: 10px auto 0;
-}
+      .video-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
+      }
 
-/* GRID */
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 35px;
-}
+      .video-thumb {
+        position: relative;
+        height: 230px;
+        overflow: hidden;
+        background: #000;
+      }
 
-/* CARD */
-.video-card {
-  background: rgba(255,255,255,0.95);
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
+      .video-thumb video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-.video-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.18);
-}
+      .video-poster {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
 
-/* THUMB */
-.video-thumb {
-  position: relative;
-  height: 230px;
-  overflow: hidden;
-}
+      .play-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35));
+        color: white;
+        font-size: 3rem;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        cursor: pointer;
+      }
 
-.video-thumb video,
-.video-thumb iframe {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+      .video-card:hover .play-overlay {
+        opacity: 1;
+      }
 
-/* PLAY BUTTON */
-.play-btn {
-  position: absolute;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(
-    rgba(0,0,0,0.35),
-    rgba(0,0,0,0.35)
-  );
-  color: white;
-  font-size: 3rem;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  cursor: pointer;
-}
+      .play-overlay i {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        padding: 22px 26px;
+        backdrop-filter: blur(6px);
+        transition: transform 0.3s ease;
+      }
 
-.video-card:hover .play-btn {
-  opacity: 1;
-}
+      .play-overlay:hover i {
+        transform: scale(1.1);
+      }
 
-.play-btn i {
-  background: rgba(255,255,255,0.2);
-  border-radius: 50%;
-  padding: 22px 26px;
-  backdrop-filter: blur(6px);
-}
+      .video-info {
+        padding: 20px;
+        text-align: center;
+      }
 
-/* INFO */
-.video-info {
-  padding: 20px;
-  text-align: center;
-}
+      .video-info h3 {
+        color: var(--primary-color);
+        font-size: 1.15rem;
+        margin-bottom: 6px;
+      }
 
-.video-info h3 {
-  color: var(--primary-color);
-  font-size: 1.15rem;
-  margin-bottom: 6px;
-}
+      .video-info span {
+        font-size: 0.85rem;
+        color: #777;
+      }
 
-.video-info span {
-  font-size: 0.85rem;
-  color: #777;
-}
+      .video-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 3000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
 
-/* MOBILE */
-@media (max-width: 768px) {
-  .video-thumb {
-    height: 200px;
-  }
-  .video-header h2 {
-    font-size: 1.6rem;
-  }
-}
-/* ===== WHATSAPP FLOAT ===== */
-.whatsapp-float {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  width: 60px;
-  height: 60px;
-  background: #25D366;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  z-index: 3000;
-  transition: transform 0.3s ease;
-}
+      .video-modal.active {
+        display: flex;
+      }
 
-.whatsapp-float:hover {
-  transform: scale(1.1);
-}
-/* ========== AJOUTEZ CE CSS DANS VOTRE BALISE <style> ========== */
+      .video-modal-content {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+      }
 
-/* SECTION VIDÉO */
-.video-section {
-  margin-bottom: 70px;
-}
+      .video-modal video {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
 
-.video-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
+      .close-video {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        z-index: 10;
+      }
 
-.video-header h2 {
-  font-size: 2rem;
-  color: var(--primary-color);
-  position: relative;
-  padding-bottom: 15px;
-}
+      .close-video:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+      }
 
-.video-header h2::after {
-  content: "";
-  display: block;
-  width: 80px;
-  height: 3px;
-  background: var(--secondary-color);
-  margin: 15px auto 0;
-}
+      @media (max-width: 768px) {
+        .video-grid {
+          grid-template-columns: 1fr;
+          gap: 25px;
+        }
 
-.video-header p {
-  color: #666;
-  max-width: 600px;
-  margin: 10px auto 0;
-}
+        .video-thumb {
+          height: 200px;
+        }
 
-/* GRILLE VIDÉOS */
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 35px;
-}
+        .video-header h2 {
+          font-size: 1.6rem;
+        }
+      }
 
-/* CARTE VIDÉO */
-.video-card {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  cursor: pointer;
-}
+      /* ===== WHATSAPP FLOAT ===== */
+      .whatsapp-float {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        width: 60px;
+        height: 60px;
+        background: #25D366;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 3000;
+        transition: transform 0.3s ease;
+      }
 
-.video-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
-}
+      .whatsapp-float:hover {
+        transform: scale(1.1);
+      }
 
-/* THUMBNAIL VIDÉO */
-.video-thumb {
-  position: relative;
-  height: 230px;
-  overflow: hidden;
-  background: #000;
-}
+      /* ===== GALERIE PHOTOS PREMIUM ===== */
+      .gallery-section {
+        margin-bottom: 80px;
+      }
 
-.video-thumb video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+      .gallery-header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
 
-/* BOUTON PLAY OVERLAY */
-.play-overlay {
-  position: absolute;
-  inset: 0,1;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.35),
-    rgba(0, 0, 0, 0.35)
-  );
-  color: white;
-  font-size: 3rem;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
+      .gallery-header h2 {
+        font-size: 2.5rem;
+        background: var(--ocean-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 15px;
+        animation: floatTitle 3s ease-in-out infinite;
+      }
 
-.video-card:hover .play-overlay {
-  opacity: 1;
-}
+      @keyframes floatTitle {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
 
-.play-overlay i {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  padding: 22px 26px;
-  backdrop-filter: blur(6px);
-}
+      .gallery-subtitle {
+        font-size: 1.1rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+      }
 
-/* INFO VIDÉO */
-.video-info {
-  padding: 20px;
-  text-align: center;
-}
+      /* Filtres de galerie */
+      .gallery-filters {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
 
-.video-info h3 {
-  color: var(--primary-color);
-  font-size: 1.15rem;
-  margin-bottom: 6px;
-}
+      .filter-btn {
+        padding: 12px 25px;
+        border: none;
+        background: white;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--primary-color);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+      }
 
-.video-info span {
-  font-size: 0.85rem;
-  color: #777;
-}
+      .filter-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--ocean-gradient);
+        transition: left 0.4s ease;
+        z-index: 0;
+      }
 
-/* MODAL VIDÉO PLEIN ÉCRAN */
-.video-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 3000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+      .filter-btn:hover::before {
+        left: 0;
+      }
 
-.video-modal.active {
-  display: flex;
-}
+      .filter-btn span {
+        position: relative;
+        z-index: 1;
+      }
 
-.video-modal-content {
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
-}
+      .filter-btn:hover {
+        color: white;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      }
 
-.video-modal video {
-  width: 100%;
-  height: auto;
-  display: block;
-}
+      .filter-btn.active {
+        background: var(--ocean-gradient);
+        color: white;
+        transform: translateY(-2px);
+      }
 
-/* BOUTON FERMER */
-.close-video {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  z-index: 10;
-}
+      /* Grille de galerie */
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+      }
 
-.close-video:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
-}
+      /* Carte photo */
+      .photo-card {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        height: 350px;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      }
 
-/* RESPONSIVE MOBILE */
-@media (max-width: 768px) {
-  .video-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
+      .photo-card:hover {
+        transform: translateY(-15px) rotateX(5deg) rotateY(-5deg) scale(1.03);
+        box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+      }
 
-  .video-thumb {
-    height: 200px;
-  }
+      .photo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+        filter: brightness(0.95);
+      }
 
-  .video-header h2 {
-    font-size: 1.6rem;
-  }
-}
-/* Style pour les posters d'images */
-.video-poster {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+      .photo-card:hover .photo-image {
+        transform: scale(1.1);
+        filter: brightness(1.05);
+      }
 
-.video-thumb {
-  position: relative;
-  height: 230px;
-  overflow: hidden;
-  background: #f0f0f0; /* Fond gris clair au lieu de noir */
-}
+      /* Overlay */
+      .photo-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        padding: 30px 25px;
+        transform: translateY(100%);
+        transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        color: white;
+      }
 
-.play-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex; /* Changé de 'none' à 'flex' */
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.35),
-    rgba(0, 0, 0, 0.35)
-  );
-  color: white;
-  font-size: 3rem;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  cursor: pointer;
-}
+      .photo-card:hover .photo-overlay {
+        transform: translateY(0);
+      }
 
-.video-card:hover .play-overlay {
-  opacity: 1;
-}
+      .photo-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: white;
+      }
 
-.play-overlay i {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  padding: 22px 26px;
-  backdrop-filter: blur(6px);
-  transition: transform 0.3s ease;
-}
+      .photo-category {
+        display: inline-block;
+        padding: 5px 12px;
+        background: var(--secondary-color);
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
 
-.play-overlay:hover i {
-  transform: scale(1.1);
-}
+      .photo-description {
+        font-size: 0.95rem;
+        opacity: 0.9;
+        line-height: 1.5;
+      }
+
+      /* Badge */
+      .photo-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--sunset-gradient);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        transform: translateX(100px);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      }
+
+      .photo-card:hover .photo-badge {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      /* Statistiques */
+      .gallery-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin: 50px 0;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: var(--ocean-gradient);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.6s ease;
+      }
+
+      .stat-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      }
+
+      .stat-number {
+        font-size: 3rem;
+        font-weight: 800;
+        background: var(--ocean-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      /* Modal Galerie */
+      .photo-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .photo-modal.active {
+        display: flex;
+        opacity: 1;
+      }
+
+      .photo-modal-content {
+        position: relative;
+        width: 90%;
+        max-width: 1000px;
+        height: 90vh;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+        transform: scale(0.9);
+        animation: modalAppear 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      }
+
+      @keyframes modalAppear {
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .modal-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 40px;
+      }
+
+      .modal-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        z-index: 10;
+      }
+
+      .modal-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .modal-prev {
+        left: 20px;
+      }
+
+      .modal-next {
+        right: 20px;
+      }
+
+      .modal-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        padding: 30px;
+        color: white;
+        transform: translateY(100%);
+        transition: transform 0.5s ease;
+      }
+
+      .photo-modal.active .modal-info {
+        transform: translateY(0);
+      }
+
+      .modal-photo-title {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .modal-photo-description {
+        font-size: 1rem;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      .close-photo-modal {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .close-photo-modal:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+      }
+
+      /* Responsive Galerie */
+      @media (max-width: 1024px) {
+        .gallery-grid {
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+        
+        .gallery-header h2 {
+          font-size: 2.2rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .gallery-header h2 {
+          font-size: 1.8rem;
+        }
+        
+        .gallery-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+        
+        .photo-card {
+          height: 300px;
+        }
+        
+        .gallery-filters {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .filter-btn {
+          width: 80%;
+        }
+        
+        .modal-nav-btn {
+          width: 50px;
+          height: 50px;
+        }
+        
+        .gallery-stats {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .gallery-header h2 {
+          font-size: 1.6rem;
+        }
+        
+        .photo-card {
+          height: 250px;
+        }
+        
+        .filter-btn {
+          padding: 10px 20px;
+          font-size: 0.9rem;
+        }
+      }
+
+      /* Animations supplémentaires */
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .animate-left {
+        animation: fadeInLeft 0.8s ease-out forwards;
+      }
+
+      .animate-right {
+        animation: fadeInRight 0.8s ease-out forwards;
+      }
     </style>
 </head>
 <body>
@@ -1372,7 +1650,6 @@
       <button class="menu-toggle" id="menuToggle">
         <i class="fas fa-bars"></i>
       </button>
-      
     </header>
 
     <!-- Sidebar Overlay -->
@@ -1396,12 +1673,17 @@
             </a>
           </li>
           <li>
-  <a href="#videos" class="nav-link">
-    <i class="fas fa-video"></i>
-    <span data-fr="Vidéos" data-it="Video">Vidéos</span>
-  </a>
-</li>
-
+            <a href="#videos" class="nav-link">
+              <i class="fas fa-video"></i>
+              <span data-fr="Vidéos" data-it="Video">Vidéos</span>
+            </a>
+          </li>
+          <li>
+            <a href="#gallery" class="nav-link">
+              <i class="fas fa-images"></i>
+              <span data-fr="Galerie" data-it="Galleria">Galerie</span>
+            </a>
+          </li>
           <li>
             <a href="#localisation" class="nav-link">
               <i class="fas fa-map-marked-alt"></i>
@@ -1414,7 +1696,6 @@
               <span data-fr="Contact" data-it="Contatto">Contact</span>
             </a>
           </li>
-
           <li>
             <a href="https://www.instagram.com/paddle.kelibia_summer?igsh=dmUyNWZqZ2Z2ZnQ4" target="_blank">
               <i class="fab fa-instagram"></i>
@@ -1442,7 +1723,7 @@
       </div>
 
       <div class="sidebar-footer">
-        <p>© <span id="year">2025</span> Paddle Kelibia</p>
+        <p>© <span id="year">2026</span> Paddle Kelibia</p>
       </div>
     </aside>
 
@@ -1453,15 +1734,8 @@
         <section class="hero animated">
           <div class="hero-content">
             <img src="kelibia.png" alt="Kelibia" class="hero-logo" />
-            
-            <h5 data-fr="Location de Paddle à Plage El Belge" data-it="Noleggio SUP a Plage El Belge">
-               <!-- Drapeau tunisien à gauche -->
-        <a href="?lang=tn">
-          <img src="https://flagcdn.com/tn.svg" alt="Tunisien" width="30" height="20" />
-        </a>
-Location de Paddle à Plage El Belge <a href="?lang=it">
-          <img src="https://flagcdn.com/it.svg" alt="Italiano" width="30" height="20" />
-        </a>
+            <h2 data-fr="Location de Paddle à Plage El Belge" data-it="Noleggio SUP a Plage El Belge">
+              Location de Paddle à Plage El Belge
             </h2>
             <p data-fr="Découvrez les eaux cristallines de Kelibia avec nos paddles gonflables haut de gamme" 
                data-it="Scopri le acque cristalline di Kelibia con i nostri SUP gonfiabili di alta qualità">
@@ -1469,85 +1743,195 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
             </p>
           </div>
         </section>
-<!-- ESPACE VIDEOS PREMIUM -->
-<!-- SECTION VIDÉOS PREMIUM -->
-<section id="videos" class="video-section animated delay-2">
-  <div class="video-header">
-    <h2 data-fr="Nos Sessions Paddle en Vidéo" data-it="Le Nostre Sessioni SUP in Video">
-      Nos Sessions Paddle en Vidéo
-    </h2>
-    <p data-fr="Plongez dans l'expérience Paddle Kelibia Summer" 
-       data-it="Immergiti nell'esperienza Paddle Kelibia Summer">
-      Plongez dans l'expérience Paddle Kelibia Summer
-    </p>
-  </div>
 
-  <div class="video-grid">
-    <!-- VIDÉO 1 - DRONE -->
-    <div class="video-card" onclick="openVideo('drone.mp4')">
-      <div class="video-thumb">
-        <img src="dronee.png" alt="Vue Drone" class="video-poster">
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-info">
-        <h3>🚁 Vue Aérienne Drone</h3>
-        <span>Plage El Belge • Kelibia</span>
-      </div>
-    </div>
+        <!-- SECTION VIDÉOS -->
+        <section id="videos" class="video-section animated delay-2">
+          <div class="video-header">
+            <h2 data-fr="Nos Sessions Paddle en Vidéo" data-it="Le Nostre Sessioni SUP in Video">
+              Nos Sessions Paddle en Vidéo
+            </h2>
+            <p data-fr="Plongez dans l'expérience Paddle Kelibia Summer" 
+               data-it="Immergiti nell'esperienza Paddle Kelibia Summer">
+              Plongez dans l'expérience Paddle Kelibia Summer
+            </p>
+          </div>
 
-    <!-- VIDÉO 2 - INITIATION -->
-    <div class="video-card" onclick="openVideo('Initiation.mp4')">
-      <div class="video-thumb">
-        <img src="init.png" alt="Session Initiation" class="video-poster">
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-info">
-        <h3>🏄 Session Initiation</h3>
-        <span>Paddle Kelibia Summer</span>
-      </div>
-    </div>
+          <div class="video-grid">
+            <!-- VIDÉO 1 - DRONE -->
+            <div class="video-card" onclick="openVideo('drone.mp4')">
+              <div class="video-thumb">
+                <img src="dronee.png" alt="Vue Drone" class="video-poster">
+                <div class="play-overlay">
+                  <i class="fas fa-play"></i>
+                </div>
+              </div>
+              <div class="video-info">
+                <h3>🚁 Vue Aérienne Drone</h3>
+                <span>Plage El Belge • Kelibia</span>
+              </div>
+            </div>
 
-    <!-- VIDÉO 3 - HUSKY -->
-    <div class="video-card" onclick="openVideo('Husky.mp4')">
-      <div class="video-thumb">
-        <img src="huskyy.png" alt="Paddle avec Husky"
- class="video-poster">
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-info">
-        <h3>🐺 Paddle avec Husky</h3>
-        <span>Moments inoubliables</span>
-      </div>
-    </div>
-</div>
-</section>
+            <!-- VIDÉO 2 - INITIATION -->
+            <div class="video-card" onclick="openVideo('Initiation.mp4')">
+              <div class="video-thumb">
+                <img src="init.png" alt="Session Initiation" class="video-poster">
+                <div class="play-overlay">
+                  <i class="fas fa-play"></i>
+                </div>
+              </div>
+              <div class="video-info">
+                <h3>🏄 Session Initiation</h3>
+                <span>Paddle Kelibia Summer</span>
+              </div>
+            </div>
 
-<!-- MODAL VIDÉO PLEIN ÉCRAN (À placer avant </body>) -->
-<div class="video-modal" id="videoModal">
-  <div class="video-modal-content">
-    <button class="close-video" onclick="closeVideo()">
-      <i class="fas fa-times"></i>
-    </button>
-    <video id="modalVideo" controls>
-      <source src="" type="video/mp4">
-    </video>
-  </div>
-</div>
-</section>
+            <!-- VIDÉO 3 - HUSKY -->
+            <div class="video-card" onclick="openVideo('Husky.mp4')">
+              <div class="video-thumb">
+                <img src="huskyy.png" alt="Paddle avec Husky" class="video-poster">
+                <div class="play-overlay">
+                  <i class="fas fa-play"></i>
+                </div>
+              </div>
+              <div class="video-info">
+                <h3>🐺 Paddle avec Husky</h3>
+                <span>Moments inoubliables</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
+        <!-- SECTION GALERIE PHOTOS PREMIUM -->
+        <section id="gallery" class="gallery-section animated delay-1">
+          <div class="gallery-header">
+            <h2 data-fr="Notre Galerie Photos" data-it="La Nostra Galleria Foto">Notre Galerie Photos</h2>
+            <p class="gallery-subtitle" data-fr="Découvrez les moments magiques capturés sur l'eau" 
+               data-it="Scopri i momenti magici catturati sull'acqua">
+              Découvrez les moments magiques capturés sur l'eau
+            </p>
+          </div>
+
+        
+
+          <!-- Statistiques -->
+          <div class="gallery-stats">
+            <div class="stat-card animate-left delay-1">
+              <div class="stat-number" id="totalPhotos">5</div>
+              <div class="stat-label" data-fr="Photos" data-it="Foto">Photos</div>
+            </div>
+            <div class="stat-card animate-up delay-2">
+              <div class="stat-number" id="happyClientsCount">50+</div>
+              <div class="stat-label" data-fr="Clients Satisfaits" data-it="Clienti Soddisfatti">Clients Satisfaits</div>
+            </div>
+            <div class="stat-card animate-right delay-3">
+              <div class="stat-number" id="totalSessions">200+</div>
+              <div class="stat-label" data-fr="Sessions Paddle" data-it="Sessioni SUP">Sessions Paddle</div>
+            </div>
+          </div>
+
+          <!-- Grille de photos -->
+          <div class="gallery-grid">
+            <!-- Photo 1 - Hamza -->
+            <div class="photo-card animate-up delay-1" data-category="clients" data-index="0">
+              <img src="hamza.jpeg" alt="Hamza Paddle Session" class="photo-image" loading="lazy">
+              <div class="photo-overlay">
+                <div class="photo-category">Client</div>
+                <h3 class="photo-title">Hamza fennira - Session Matinale</h3>
+                
+              </div>
+              <div class="photo-badge">
+                <i class="fas fa-star"></i> Top Client
+              </div>
+            </div>
+
+            <!-- Photo 2 - Yassine -->
+            <div class="photo-card animate-up delay-2" data-category="clients sunset" data-index="1">
+              <img src="yassine.jpeg" alt="Yassine Sunset Paddle" class="photo-image" loading="lazy">
+              <div class="photo-overlay">
+                <div class="photo-category">Sunset & Client</div>
+                <h3 class="photo-title">Yassine saya- Golden Hour</h3>
+                
+              </div>
+              <div class="photo-badge">
+                <i class="fas fa-sun"></i> Golden Hour
+              </div>
+            </div>
+
+            <!-- Photo 3 - Moez -->
+            <div class="photo-card animate-up delay-3" data-category="clients" data-index="2">
+              <img src="moez.jpeg" alt="Moez Group Session" class="photo-image" loading="lazy">
+              <div class="photo-overlay">
+                <div class="photo-category">client</div>
+                <h3 class="photo-title">Moez ben chrifia</h3>
+                
+              </div>
+              <div class="photo-badge">
+                <i class="fas fa-users"></i> Groupe
+              </div>
+            </div>
+
+            <!-- Photo 4 - Sunrise -->
+            <div class="photo-card animate-up delay-4" data-category="nature sunset" data-index="3">
+              <img src="sunrise.jpeg" alt="Sunrise Kelibia" class="photo-image" loading="lazy">
+              <div class="photo-overlay">
+                <div class="photo-category">Nature</div>
+                <h3 class="photo-title">Lever de Soleil Magique</h3>
+                
+              </div>
+              <div class="photo-badge">
+                <i class="fas fa-sunrise"></i> Sunrise
+              </div>
+            </div>
+
+            <!-- Photo 5 - Drone -->
+            <div class="photo-card animate-up delay-1" data-category="drone nature" data-index="4">
+              <img src="drone.jpeg" alt="Drone View" class="photo-image" loading="lazy">
+              <div class="photo-overlay">
+                <div class="photo-category">Drone</div>
+                <h3 class="photo-title">Vue Aérienne Drone</h3>
+                
+              </div>
+              <div class="photo-badge">
+                <i class="fas fa-drone"></i> Vue Drone
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA Galerie -->
+          <div style="text-align: center; margin-top: 40px;">
+            <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 25px; border-radius: 20px; display: inline-block; max-width: 600px;">
+              <h3 style="color: var(--primary-color); margin-bottom: 15px;">
+                <i class="fas fa-camera" style="margin-right: 10px; color: var(--secondary-color);"></i>
+                <span data-fr="Partagez Vos Moments" data-it="Condividi i Tuoi Momenti">Partagez Vos Moments</span>
+              </h3>
+              <p style="color: #666; margin-bottom: 20px;">
+                <span data-fr="Utilisez #PaddleKelibiaSummer pour apparaître dans notre galerie !" 
+                      data-it="Usa #PaddleKelibiaSummer per apparire nella nostra galleria!">
+                  Utilisez #PaddleKelibiaSummer pour apparaître dans notre galerie !
+                </span>
+              </p>
+              <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://www.instagram.com/paddle.kelibia_summer" target="_blank" 
+                   style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 25px; background: #E4405F; color: white; text-decoration: none; border-radius: 30px; font-weight: 600;">
+                  <i class="fab fa-instagram"></i>
+                  <span>Instagram</span>
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61557485246643" target="_blank"
+                   style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 25px; background: #1877F2; color: white; text-decoration: none; border-radius: 30px; font-weight: 600;">
+                  <i class="fab fa-facebook-f"></i>
+                  <span>Facebook</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <!-- Promo Banner -->
         <div class="promo-banner animated delay-1">
           <h3>
             <i class="fas fa-tag"></i>
-            <span data-fr="PROMOTION SPÉCIALE ÉTÉ 2025" data-it="PROMOZIONE SPECIALE ESTATE 2025">
-              PROMOTION SPÉCIALE ÉTÉ 2025
+            <span data-fr="PROMOTION SPÉCIALE ÉTÉ 2026" data-it="PROMOZIONE SPECIALE ESTATE 2026">
+              PROMOTION SPÉCIALE ÉTÉ 2026
             </span>
           </h3>
           <p data-fr="Location de groupe - 10% de réduction à partir de 3 paddles réservés" 
@@ -1616,7 +2000,25 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
                 <label for="time" class="required-field" data-fr="Heure de réservation:" data-it="Orario di prenotazione:">
                   Heure de réservation:
                 </label>
-                <input type="time" id="time" name="time" required min="06:00" max="18:00" />
+                <select id="time" name="time" required>
+                  <option value="" disabled selected data-fr="Sélectionnez une heure" data-it="Seleziona un orario">
+                    Sélectionnez une heure
+                  </option>
+                  <option value="06:00">06:00</option>
+                  <option value="07:00">07:00</option>
+                  <option value="08:00">08:00</option>
+                  <option value="09:00">09:00</option>
+                  <option value="10:00">10:00</option>
+                  <option value="11:00">11:00</option>
+                  <option value="12:00">12:00</option>
+                  <option value="13:00">13:00</option>
+                  <option value="14:00">14:00</option>
+                  <option value="15:00">15:00</option>
+                  <option value="16:00">16:00</option>
+                  <option value="17:00">17:00</option>
+                  <option value="18:00">18:00</option>
+                  <option value="19:00">19:00</option>
+                </select>
                 <span class="form-note" data-fr="Heures d'ouverture: 6h00 - 19h00" data-it="Orari di apertura: 06:00 - 19:00">
                   Heures d'ouverture: 6h00 - 19h00
                 </span>
@@ -1671,16 +2073,16 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
 
               <div class="form-group">
                 <label for="client_email" data-fr="Votre email (optionnel):" data-it="La tua email (facoltativo):">
-  Votre email (optionnel):
-</label>
+                  Votre email (optionnel):
+                </label>
                 <input 
-    type="email" 
-    id="client_email" 
-    name="client_email" 
-    placeholder="Email pour recevoir la facture de confirmation" 
-    data-fr-placeholder="Email pour recevoir la facture de confirmation"
-    data-it-placeholder="Email per ricevere la fattura di conferma"
-  />
+                  type="email" 
+                  id="client_email" 
+                  name="client_email" 
+                  placeholder="Email pour recevoir la facture de confirmation" 
+                  data-fr-placeholder="Email pour recevoir la facture de confirmation"
+                  data-it-placeholder="Email per ricevere la fattura di conferma"
+                />
               </div>
 
               <div class="form-group">
@@ -1765,7 +2167,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
       <!-- Footer -->
       <footer>
         <p>
-          © <span id="footerYear">2025</span> Paddle Kelibia Summer - 
+          © <span id="footerYear">2026</span> Paddle Kelibia Summer - 
           <span data-fr="Location de paddle à Plage El Belge" data-it="Noleggio SUP a Plage El Belge">
             Location de paddle à Plage El Belge
           </span>
@@ -1806,45 +2208,246 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
       </div>
     </div>
 
+    <!-- Modal Vidéo -->
+    <div class="video-modal" id="videoModal">
+      <div class="video-modal-content">
+        <button class="close-video" onclick="closeVideo()">
+          <i class="fas fa-times"></i>
+        </button>
+        <video id="modalVideo" controls>
+          <source src="" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Modal Galerie Photo -->
+    <div class="photo-modal" id="photoModal">
+      <div class="photo-modal-content">
+        <button class="close-photo-modal" id="closePhotoModal">
+          <i class="fas fa-times"></i>
+        </button>
+        <button class="modal-nav-btn modal-prev" id="prevPhotoBtn">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="modal-nav-btn modal-next" id="nextPhotoBtn">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <img id="modalPhoto" class="modal-photo" alt="">
+        <div class="modal-info">
+          <h3 id="modalPhotoTitle" class="modal-photo-title"></h3>
+          <p id="modalPhotoDescription" class="modal-photo-description"></p>
+        </div>
+      </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-      // Language System
+      // ========== VARIABLES GLOBALES ==========
       let currentLang = 'fr';
-      
-      function switchLanguage(lang) {
-        currentLang = lang;
-        document.querySelectorAll('[data-fr]').forEach(el => {
-          const text = el.getAttribute(`data-${lang}`);
-          if (text) {
-            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-              el.placeholder = text;
-            } else if (el.tagName === 'OPTION') {
-              el.textContent = text;
-            } else {
-              el.textContent = text;
-            }
-          }
-          
+      let currentPhotoIndex = 0;
+      let currentFilter = 'all';
+      let isPhotoModalOpen = false;
+
+      // Données de la galerie
+      const galleryData = [
+        {
+          src: "hamza.jpeg",
+          title: "Hamza - Session Matinale",
+          description: "Hamza profite d'une session paddle tôt le matin sur les eaux calmes et cristallines de Kelibia.",
+          category: "clients"
+        },
+        {
+          src: "yassine.jpeg",
+          title: "Yassine - Golden Hour Paddle",
+          description: "Yassine capture des moments magiques pendant l'heure dorée. Les couleurs du coucher de soleil créent une ambiance unique.",
+          category: "clients sunset"
+        },
+        {
+          src: "moez.jpeg",
+          title: "Moez - Aventure en Groupe",
+          description: "Moez et ses amis vivent une aventure paddle inoubliable. Rires, partage et découverte des paysages magnifiques.",
+          category: "clients"
+        },
+        {
+          src: "sunrise.jpeg",
+          title: "Lever de Soleil Magique",
+          description: "Les premières lueurs du jour illuminent Plage El Belge. Un moment de paix et de beauté pure pour commencer la journée.",
+          category: "nature sunset"
+        },
+        {
+          src: "drone.jpeg",
+          title: "Vue Aérienne Drone",
+          description: "Perspective unique de nos sessions paddle vue du ciel. Les formations créent des motifs artistiques sur l'eau turquoise.",
+          category: "drone nature"
+        }
+      ];
+
+      // ========== FONCTIONS GALERIE ==========
+      function initGallery() {
+        // Initialiser les filtres
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            filterGallery();
+          });
         });
 
-        // Update active language button
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.lang === lang);
+        // Initialiser les cartes photos
+        const photoCards = document.querySelectorAll('.photo-card');
+        photoCards.forEach((card, index) => {
+          card.addEventListener('click', () => {
+            currentPhotoIndex = parseInt(card.dataset.index);
+            openPhotoModal(currentPhotoIndex);
+          });
+        });
+
+        // Initialiser le modal photo
+        const closePhotoModalBtn = document.getElementById('closePhotoModal');
+        const prevPhotoBtn = document.getElementById('prevPhotoBtn');
+        const nextPhotoBtn = document.getElementById('nextPhotoBtn');
+        const photoModal = document.getElementById('photoModal');
+
+        closePhotoModalBtn.addEventListener('click', closePhotoModal);
+        prevPhotoBtn.addEventListener('click', showPrevPhoto);
+        nextPhotoBtn.addEventListener('click', showNextPhoto);
+
+        // Fermer en cliquant à l'extérieur
+        photoModal.addEventListener('click', (e) => {
+          if (e.target === photoModal) closePhotoModal();
         });
       }
 
-      // Initialize
+      function filterGallery() {
+        const cards = document.querySelectorAll('.photo-card');
+        
+        cards.forEach((card, index) => {
+          const categories = card.dataset.category.split(' ');
+          
+          if (currentFilter === 'all' || categories.includes(currentFilter)) {
+            card.style.display = 'block';
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0) scale(1)';
+            }, index * 100);
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px) scale(0.95)';
+            setTimeout(() => {
+              card.style.display = 'none';
+            }, 300);
+          }
+        });
+      }
+
+      function openPhotoModal(index) {
+        isPhotoModalOpen = true;
+        const modal = document.getElementById('photoModal');
+        const modalPhoto = document.getElementById('modalPhoto');
+        const modalTitle = document.getElementById('modalPhotoTitle');
+        const modalDescription = document.getElementById('modalPhotoDescription');
+        
+        const data = galleryData[index];
+        modalPhoto.src = data.src;
+        modalTitle.textContent = data.title;
+        modalDescription.textContent = data.description;
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closePhotoModal() {
+        isPhotoModalOpen = false;
+        const modal = document.getElementById('photoModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+
+      function showNextPhoto() {
+        currentPhotoIndex = (currentPhotoIndex + 1) % galleryData.length;
+        updatePhotoModal();
+      }
+
+      function showPrevPhoto() {
+        currentPhotoIndex = (currentPhotoIndex - 1 + galleryData.length) % galleryData.length;
+        updatePhotoModal();
+      }
+
+      function updatePhotoModal() {
+        const modalPhoto = document.getElementById('modalPhoto');
+        const modalTitle = document.getElementById('modalPhotoTitle');
+        const modalDescription = document.getElementById('modalPhotoDescription');
+        
+        const data = galleryData[currentPhotoIndex];
+        modalPhoto.src = data.src;
+        modalTitle.textContent = data.title;
+        modalDescription.textContent = data.description;
+      }
+
+      // ========== GESTION CLAVIER ==========
+      function handleKeyDown(e) {
+        // Gestion Échap pour les modaux
+        if (e.key === 'Escape') {
+          if (isPhotoModalOpen) {
+            e.preventDefault();
+            closePhotoModal();
+          }
+          
+          const videoModal = document.getElementById('videoModal');
+          if (videoModal.classList.contains('active')) {
+            e.preventDefault();
+            closeVideo();
+          }
+        }
+        
+        // Navigation dans la galerie
+        if (isPhotoModalOpen) {
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            showPrevPhoto();
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            showNextPhoto();
+          }
+        }
+      }
+
+      // ========== FONCTIONS VIDÉO ==========
+      function openVideo(videoSrc) {
+        const modal = document.getElementById('videoModal');
+        const modalVideo = document.getElementById('modalVideo');
+        
+        modalVideo.querySelector('source').src = videoSrc;
+        modalVideo.load();
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        modalVideo.play();
+      }
+
+      function closeVideo() {
+        const modal = document.getElementById('videoModal');
+        const modalVideo = document.getElementById('modalVideo');
+        
+        modalVideo.pause();
+        modalVideo.currentTime = 0;
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+
+      // ========== INITIALISATION ==========
       document.addEventListener('DOMContentLoaded', function () {
-        // Year
+        // Année
         const year = new Date().getFullYear();
         document.getElementById('year').textContent = year;
         document.getElementById('footerYear').textContent = year;
 
-        // Min date for reservation
+        // Date min pour réservation
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('date').min = today;
 
-        // Mobile menu toggle
+        // Menu mobile
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -1859,7 +2462,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
           sidebarOverlay.classList.remove('active');
         });
 
-        // Close sidebar on nav link click (mobile)
+        // Fermer sidebar sur mobile
         document.querySelectorAll('.nav-link').forEach(link => {
           link.addEventListener('click', () => {
             if (window.innerWidth <= 768) {
@@ -1869,14 +2472,14 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
           });
         });
 
-        // Language switcher
+        // Langue
         document.querySelectorAll('.lang-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             switchLanguage(btn.dataset.lang);
           });
         });
 
-        // Active nav links
+        // Navigation active
         document.querySelectorAll('.nav-link').forEach(link => {
           link.addEventListener('click', function() {
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -1884,7 +2487,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
           });
         });
 
-        // Paddle counter
+        // Compteur paddle
         const paddleCount = document.getElementById('paddle-count');
         const decreaseBtn = document.getElementById('decrease-paddle');
         const increaseBtn = document.getElementById('increase-paddle');
@@ -1914,9 +2517,8 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
           updateDiscountNotice();
         });
 
-        // Map initialization
-        const plageBelge = [36.8524, 11.1265
-];
+        // Carte
+        const plageBelge = [36.8524, 11.1265];
         const map = L.map('map').setView(plageBelge, 17);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1926,14 +2528,14 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
         const marker = L.marker(plageBelge).addTo(map);
         marker.bindPopup('<b>Paddle Kelibia Summer</b><br>Plage El Belge').openPopup();
 
-        // Form submission
+        // Formulaire
         document.getElementById('reservationForm').addEventListener('submit', function(e) {
           e.preventDefault();
 
           const data = {
             prenom: document.getElementById('prenom').value.trim(),
             nom: document.getElementById('nom').value.trim(),
-           client_email: document.getElementById('client_email').value.trim() || 'Non fourni',
+            client_email: document.getElementById('client_email').value.trim() || 'Non fourni',
             tel: document.getElementById('tel').value,
             date: document.getElementById('date').value,
             time: document.getElementById('time').value,
@@ -1971,7 +2573,7 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
           document.getElementById('closeModal').onclick = function() {
             document.getElementById('confirmationModal').style.display = 'none';
 
-            // Send emails
+            // Envoyer emails
             emailjs.send("service_vfzpwsf", "template_g8q6pef", {
               prenom: data.prenom,
               nom: data.nom,
@@ -2004,76 +2606,67 @@ Location de Paddle à Plage El Belge <a href="?lang=it">
           };
         });
 
+        // Fermer modals succès
         document.getElementById('closeSuccessModal').addEventListener('click', () => {
           document.getElementById('successModal').style.display = 'none';
         });
+
+        // Initialiser la galerie
+        initGallery();
+
+        // Écouter les touches clavier
+        document.addEventListener('keydown', handleKeyDown);
+
+        // Fermer vidéo en cliquant à l'extérieur
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+          if (e.target.id === 'videoModal') {
+            closeVideo();
+          }
+        });
+
+        // Précharger les images
+        galleryData.forEach(img => {
+          const image = new Image();
+          image.src = img.src;
+        });
       });
-      // Fonction pour ouvrir la vidéo en plein écran
-function openVideo(videoSrc) {
-  const modal = document.getElementById('videoModal');
-  const modalVideo = document.getElementById('modalVideo');
-  
-  modalVideo.querySelector('source').src = videoSrc;
-  modalVideo.load();
-  modal.classList.add('active');
-  modalVideo.play();
-}
 
-// Fonction pour fermer la vidéo
-function closeVideo() {
-  const modal = document.getElementById('videoModal');
-  const modalVideo = document.getElementById('modalVideo');
-  
-  modalVideo.pause();
-  modalVideo.currentTime = 0;
-  modal.classList.remove('active');
-}
+      // ========== FONCTION LANGUE ==========
+      function switchLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll('[data-fr]').forEach(el => {
+          const text = el.getAttribute(`data-${lang}`);
+          if (text) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+              el.placeholder = text;
+            } else if (el.tagName === 'OPTION') {
+              el.textContent = text;
+            } else {
+              el.textContent = text;
+            }
+          }
+        });
 
-// Fermer avec la touche Échap
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeVideo();
-  }
-});
+        // Mettre à jour les boutons de langue
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
 
-// Fermer en cliquant en dehors de la vidéo
-document.getElementById('videoModal').addEventListener('click', (e) => {
-  if (e.target.id === 'videoModal') {
-    closeVideo();
-  }
-});
-document.querySelectorAll(".video-thumb video").forEach(video => {
-    video.addEventListener("mouseenter", () => video.play());
-    video.addEventListener("mouseleave", () => {
-      video.pause();
-      video.currentTime = 0;
-    });
-  });
-  
-  function openVideo(src) {
-    const modal = document.getElementById("videoModal");
-    const video = document.getElementById("modalVideo");
-
-    video.src = src;
-    video.load();
-    modal.classList.add("active");
-    video.play();
-  }
-
-  function closeVideo() {
-    const modal = document.getElementById("videoModal");
-    const video = document.getElementById("modalVideo");
-
-    video.pause();
-    video.currentTime = 0;
-    video.src = "";
-    modal.classList.remove("active");
-  }
-
+        // Mettre à jour les légendes de la galerie dans le modal
+        if (isPhotoModalOpen) {
+          const modalTitle = document.getElementById('modalPhotoTitle');
+          const modalDescription = document.getElementById('modalPhotoDescription');
+          const data = galleryData[currentPhotoIndex];
+          
+          // Vous devrez ajouter les traductions dans galleryData
+          // Pour l'instant, on garde les titres français
+        }
+      }
     </script>
+    
+    <!-- Bouton WhatsApp -->
     <a href="https://wa.me/21628991180" class="whatsapp-float" target="_blank">
-  <i class="fab fa-whatsapp"></i>
-</a>
-
+      <i class="fab fa-whatsapp"></i>
+    </a>
 </body>
 </html>
